@@ -25,7 +25,8 @@ if(isset($_SESSION['email'])){
                             <?php
                                 $mensaje = "";
                                 if(isset($_POST['usuario_e'])){
-                                    echo modificar_usuario($conexion, $_POST, $_SESSION['email']);
+                                   $mensaje = modificar_usuario($conexion, $_POST, $_SESSION['email']);
+                                   $registro = extraer_usuario($conexion, $_SESSION['email']);
                                 }
                             ?>
                             <h2>Edicion de datos de <?=$registro['usuario'];?></h2>
@@ -34,8 +35,16 @@ if(isset($_SESSION['email'])){
                             </p>
                             <form method="post" action="">
                                 <div class="form-group">
-                                    <label for="usuario_r">Nombre de Usuario</label>
+                                    <label for="usuario_r">Usuario</label>
                                     <input type="text" value="<?=$registro['usuario'];?>" class="form-control" id="usuario_e" placeholder="Nombre de usuario..." name="usuario_e">
+                                </div>
+                                 <div class="form-group">
+                                    <label for="nombre">Nombre</label>
+                                    <input type="text" value="<?=$registro['nombre'];?>" class="form-control" id="nombre" placeholder="Nombre de usuario..." name="nombre">
+                                </div>
+                                <div class="form-group">
+                                    <label for="nombre">Apellidos</label>
+                                    <input type="text" value="<?=$registro['apellidos'];?>" class="form-control" id="apellidos" placeholder="Nombre de usuario..." name="apellidos">
                                 </div>
                                 <div class="form-group">
                                     <label for="pass_r">Contraseña anterior</label>

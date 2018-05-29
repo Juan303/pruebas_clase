@@ -42,6 +42,14 @@ if(isset($_POST['email_r'])){
         <input type="text" class="form-control" id="usuario_r" placeholder="Nombre de usuario..." name="usuario_r">
     </div>
     <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" class="form-control" id="nombre" placeholder="Nombre..." name="nombre">
+    </div>
+    <div class="form-group">
+        <label for="apellidos">Apellidos</label>
+        <input type="text" class="form-control" id="apellidos" placeholder="Apellidos..." name="apellidos">
+    </div>
+    <div class="form-group">
         <label for="pass_r">Contraseña</label>
         <input type="password" class="form-control" id="pass_r" placeholder="Contraseña..." name="pass_r">
     </div>
