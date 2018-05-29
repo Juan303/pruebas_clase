@@ -26,13 +26,37 @@ function insertar_usuario($conexion, $array){
         return "Ya existe un usuario con ese correo electronico!";
     }
 }
+function modificar_usuario($conexion, $array, $email_user){
+    $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE email = '$email_user'");
+    $registro = mysqli_fetch_array($consulta);
+    if($registro['pass'] == $array['pass']){
+        
+    }
+    else{
+        return "La contraseña no es correcta";
+    }
+}
+function extraer_usuario($conexion, $email){
+    $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE email = '$email'");
+    $registro = mysqli_fetch_array($consulta);
+    return $registro;
+}
 function login($conexion, $email, $pass){
-
     $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE email = '$email'");
     print_r(mysqli_error($conexion));
     if($consulta->num_rows > 0){
         $row = mysqli_fetch_array($consulta);
         if ($pass == $row['pass']){
+            return true;
+        }
+    }
+    return false;
+}
+function is_admin($conexion, $email){
+    $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE email = '$email'");
+    if($consulta -> num_rows > 0){
+        $registro = mysqli_fetch_array($consulta);
+        if($registro['rol'] == 'admin'){
             return true;
         }
     }
