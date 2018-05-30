@@ -30,10 +30,7 @@
         if(isset($_POST['email'])){
             $email = $_POST['email'];
             $pass = $_POST['pass'];
-            if(login($conexion, $email, $pass)){
-                $_SESSION['email'] = $_POST['email'];
-            }
-            else{
+            if(!login($conexion, $email, $pass)){
                 $error = "Nombre de usuario o contraseña incorrectos";
             }
         }
@@ -55,14 +52,18 @@
             <?php } else { ?>
                <ul class="navbar-nav">
                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?=$_SESSION['email'];?></a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="editar_cuenta.php">Mi cuenta</a>
-                            <a class="dropdown-item" href="?salir=1">Salir</a>
-                            <?php if(is_admin($conexion, $_SESSION['email'])){ ?>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="admin_usuarios.php">Editar usuarios</a>
-                            <?php } ?>
+                        <div class="btn-group">
+                            <button class="btn btn-info dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <?=$_SESSION['usuario'];?><span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="editar_cuenta.php">Mi cuenta</a>
+                                <a class="dropdown-item" href="?salir=1">Salir</a>
+                                <?php if(is_admin($conexion, $_SESSION['email'])){ ?>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="admin_usuarios.php">Editar usuarios</a>
+                                <?php } ?>
+                            </div>
                         </div>
                     </li>
                 </ul>

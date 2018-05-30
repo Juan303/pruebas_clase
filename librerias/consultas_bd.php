@@ -52,7 +52,8 @@ function modificar_usuario($conexion, $array, $email_user)
             $apellidos = $array['apellidos'];
             $consulta = mysqli_query($conexion, "UPDATE `usuarios` SET `usuario` = '$usuario', `nombre` = '$nombre', `apellidos` = '$apellidos', `pass` = '$pass' WHERE `usuarios`.`email` = '$email_user';");
             if ($consulta) {
-                return "Datos modificados correctamente";
+                login($conexion, $email_user, $pass);
+                header("Location:?mensaje=Datos modificados correctamente");
             } else {
                 return "Fallo al modificar los datos. Prueba de nuevo mas tarde";
             }
@@ -74,6 +75,9 @@ function login($conexion, $email, $pass)
     if ($consulta->num_rows > 0) {
         $row = mysqli_fetch_array($consulta);
         if ($pass == $row['pass']) {
+            $_SESSION['email'] = $row['email'];
+            $_SESSION['usuario'] = $row['usuario'];
+            //header("refresh:0;");
             return true;
         }
     }

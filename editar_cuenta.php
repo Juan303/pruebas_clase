@@ -24,6 +24,9 @@ if(isset($_SESSION['email'])){
                         <div class="col-6">
                             <?php
                                 $mensaje = "";
+                                if(isset($_GET['mensaje'])){
+                                    $mensaje = $_GET['mensaje'];
+                                }
                                 if(isset($_POST['usuario_e'])){
                                    $mensaje = modificar_usuario($conexion, $_POST, $_SESSION['email']);
                                    $registro = extraer_usuario($conexion, $_SESSION['email']);
