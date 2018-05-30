@@ -40,15 +40,15 @@ if(isset($_SESSION['email'])){
                                 </div>
                                  <div class="form-group">
                                     <label for="nombre">Nombre</label>
-                                    <input type="text" value="<?=$registro['nombre'];?>" class="form-control" id="nombre" placeholder="Nombre de usuario..." name="nombre">
+                                    <input type="text" value="<?=$registro['nombre'];?>" class="form-control" id="nombre" placeholder="Nombre..." name="nombre">
                                 </div>
                                 <div class="form-group">
                                     <label for="nombre">Apellidos</label>
-                                    <input type="text" value="<?=$registro['apellidos'];?>" class="form-control" id="apellidos" placeholder="Nombre de usuario..." name="apellidos">
+                                    <input type="text" value="<?=$registro['apellidos'];?>" class="form-control" id="apellidos" placeholder="Apellidos..." name="apellidos">
                                 </div>
                                 <div class="form-group">
                                     <label for="pass_r">Contraseña anterior</label>
-                                    <input type="password" class="form-control" id="pass_e" placeholder="Contraseña..." name="pass_e">
+                                    <input type="password" class="form-control" id="pass_e" placeholder="Contraseña antigua..." name="pass_e">
                                 </div>
                                 <div class="form-group">
                                     <label for="pass_r">Nueva contraseña</label>
