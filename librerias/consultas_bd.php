@@ -6,7 +6,34 @@ function list_usuarios($conexion)
     $res = mysqli_query($conexion, $sql);
     return $res;
 }
+function list_productos($conexion)
+{
+    $sql = "SELECT * FROM productos";
+    $res = mysqli_query($conexion, $sql);
+    return $res;
+}
 
+function extraer_usuario($conexion, $email)
+{
+    $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE email = '$email'");
+    $registro = mysqli_fetch_array($consulta);
+    return $registro;
+}
+function login($conexion, $email, $pass)
+{
+    $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE email = '$email'");
+    print_r(mysqli_error($conexion));
+    if ($consulta->num_rows > 0) {
+        $row = mysqli_fetch_array($consulta);
+        if ($pass == $row['pass']) {
+            $_SESSION['email'] = $row['email'];
+            $_SESSION['usuario'] = $row['usuario'];
+            //header("refresh:0;");
+            return true;
+        }
+    }
+    return false;
+}
 function insertar_usuario($conexion, $array)
 {
     //extraigo el mail para comprobar si esta en la base de datos
@@ -30,59 +57,62 @@ function insertar_usuario($conexion, $array)
 }
 function modificar_usuario($conexion, $array, $email_user)
 {
-    $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE email = '$email_user'");
+    //extraigo el usuario del formulario
+    $usuario = $array['usuario_e'];
+    $email = $array['email']; 
+    //hago una consulta para saber si ese nombre de usuario esta en la base de datos
+    $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE usuario = '$usuario'");
+    $consulta2 = mysqli_query($conexion, "SELECT * FROM usuarios WHERE email = '$email'");
+
+    //extraigo el registro (si no hay registro a extraer $registro será NULL)
     $registro = mysqli_fetch_array($consulta);
-    //compruebo que la contraseña sea igual que la contraseña que hay en la base de datos.
-    if ($registro['pass'] == $array['pass_e']) {
-        //extraigo el usuario del formulario
-        $usuario = $array['usuario_e']; 
-        //hago una consulta para saber si ese nombre de usuario esta en la base de datos
-        $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE usuario = '$usuario'");
-        //extraigo el registro (si no hay registro a extraer $registro será NULL)
-        $registro = mysqli_fetch_array($consulta);
-        //ahora si el resultado de la consulta da un registro y ademas ese registro no es el del usuario 
-        //que esta haciendo la modificacion significará que hay otro usuario que no soy yo con ese nombre de usuario
-        if ($consulta->num_rows > 0 && $registro['email'] != $email_user) {
-            return "El nombre de usuario elegido ya está en la Base de Datos, porfavor escoja otro.";
-        //en caso contrario dejo insertar el registro
+    $registro2 = mysqli_fetch_array($consulta2);
+
+    //ahora si el resultado de la consulta da un registro y ademas ese registro no es el del usuario 
+    //que esta haciendo la modificacion significará que hay otro usuario que no soy yo con ese nombre de usuario
+    if($consulta2->num_rows > 0 && $registro2['email'] != $email_user){
+        return "<div class='alert alert-primary' role='alert'>El e-mail elegido ya está en la Base de Datos, porfavor escoja otro.</div>";
+    }
+    if ($consulta->num_rows > 0 && $registro['email'] != $email_user) {
+        return "<div class='alert alert-primary' role='alert'>El nombre de usuario elegido ya está en la Base de Datos, porfavor escoja otro.</div>";
+    //en caso contrario dejo insertar el registro
+    } else {
+        $usuario = $array['usuario_e'];
+        $nombre = $array['nombre'];
+        $apellidos = $array['apellidos'];
+        $consulta = mysqli_query($conexion, "UPDATE `usuarios` SET `usuario` = '$usuario', `nombre` = '$nombre', `apellidos` = '$apellidos' WHERE `usuarios`.`email` = '$email_user';");
+        if ($consulta) {
+            return "<div class='alert alert-success' role='alert'>Datos de usuario modificados correctamente</div>";
         } else {
-            $pass = $array['pass'];
-            $usuario = $array['usuario_e'];
-            $nombre = $array['nombre'];
-            $apellidos = $array['apellidos'];
-            $consulta = mysqli_query($conexion, "UPDATE `usuarios` SET `usuario` = '$usuario', `nombre` = '$nombre', `apellidos` = '$apellidos', `pass` = '$pass' WHERE `usuarios`.`email` = '$email_user';");
-            if ($consulta) {
-                login($conexion, $email_user, $pass);
-                header("Location:?mensaje=Datos modificados correctamente");
-            } else {
-                return "Fallo al modificar los datos. Prueba de nuevo mas tarde";
+            return "<div class='alert alert-danger' role='alert'>Fallo al modificar los datos. Prueba de nuevo mas tarde</div>";
+        }
+    }
+} 
+
+
+function actualizar_pass($conexion, $pass_antigua, $pass_nueva, $pass_nueva_r, $email){
+    if($pass_nueva == $pass_nueva_r){
+        $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE email = '$email'");
+        $registro = mysqli_fetch_array($consulta);
+        if($registro['pass'] == $pass_antigua){
+            $consulta = mysqli_query($conexion, "UPDATE `usuarios` SET `pass` = '$pass_nueva' WHERE `usuarios`.`email` = '$email'");
+            if($consulta){
+                return "<div class='alert alert-success' role='alert'>Contraseña cambiada satisfactoriamente</div>";
+            }
+            else{
+                return "<div class='alert alert-danger' role='alert'>No se ha podido cambiar la contraseña: fallo al cambiar la contraseña</div>";
             }
         }
-    } else {
-        return "La contraseña no es correcta";
-    }
-}
-function extraer_usuario($conexion, $email)
-{
-    $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE email = '$email'");
-    $registro = mysqli_fetch_array($consulta);
-    return $registro;
-}
-function login($conexion, $email, $pass)
-{
-    $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE email = '$email'");
-    print_r(mysqli_error($conexion));
-    if ($consulta->num_rows > 0) {
-        $row = mysqli_fetch_array($consulta);
-        if ($pass == $row['pass']) {
-            $_SESSION['email'] = $row['email'];
-            $_SESSION['usuario'] = $row['usuario'];
-            //header("refresh:0;");
-            return true;
+        else{
+            return "<div class='alert alert-danger' role='alert'>No se ha podido cambiar la contraseña: contraseña erronea</div>";
         }
     }
-    return false;
+    else{
+        return "<div class='alert alert-danger' role='alert'>No se ha podido cambiar la contraseña: las contraseñas no coinciden</div>";
+    }
+
 }
+
 function is_admin($conexion, $email)
 {
     $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE email = '$email'");

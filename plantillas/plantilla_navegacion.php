@@ -19,16 +19,16 @@
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Something else here</a>
                 </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#">Disabled</a>
             </li>-->
+            <li class="nav-item">
+                <a class="nav-link" href="productos.php">Productos</a>
+            </li>
         </ul>
         <div>
         <?php
         $error = "";
-        if(isset($_POST['email'])){
-            $email = $_POST['email'];
+        if(isset($_POST['email_login'])){
+            $email = $_POST['email_login'];
             $pass = $_POST['pass'];
             if(!login($conexion, $email, $pass)){
                 $error = "Nombre de usuario o contraseña incorrectos";
@@ -41,7 +41,7 @@
         }
         if(!isset($_SESSION['email'])) { ?>
             <form class="form-inline my-2 my-lg-0" method="post" action="">
-                <input class="form-control mr-sm-2" type="text" placeholder="Correo electronico" name="email" aria-label="Email">
+                <input class="form-control mr-sm-2" type="text" placeholder="Correo electronico" name="email_login" aria-label="Email">
                 <input class="form-control mr-sm-2" type="password" placeholder="Contraseña" name="pass" aria-label="pass">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Entrar</button>
             </form>
@@ -62,6 +62,7 @@
                                 <?php if(is_admin($conexion, $_SESSION['email'])){ ?>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="admin_usuarios.php">Editar usuarios</a>
+                                    <a class="dropdown-item" href="admin_productos.php">Editar productos</a>
                                 <?php } ?>
                             </div>
                         </div>
