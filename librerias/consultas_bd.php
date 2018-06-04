@@ -1,17 +1,12 @@
 <?php
-
+//====================================================================================================================================USUARIOS
 function list_usuarios($conexion)
 {
     $sql = "SELECT * FROM usuarios";
     $res = mysqli_query($conexion, $sql);
     return $res;
 }
-function list_productos($conexion)
-{
-    $sql = "SELECT * FROM productos";
-    $res = mysqli_query($conexion, $sql);
-    return $res;
-}
+
 
 function extraer_usuario($conexion, $email)
 {
@@ -132,4 +127,28 @@ function eliminar_registro($conexion, $id, $tabla)
 
     }
     return "Ha habido problemas para eliminar el registro";
+}
+//=========================================================================================================CATEGORIAS
+function nombre_categoria($conexion, $id_categoria){
+    $consulta = mysqli_query($conexion, "SELECT nombre FROM categorias WHERE id = '$id_categoria'");
+    $categoria = mysqli_fetch_array($consulta);
+    return $categoria['nombre'];
+}
+//=========================================================================================================PRODUCTOS
+function list_productos($conexion, $orden, $id_categoria)
+{
+    if($id_categoria != "todos"){
+        $sql = "SELECT * FROM productos WHERE id_categoria = '$id_categoria' ORDER BY $orden ASC";
+    }
+    else{
+        $sql = "SELECT * FROM productos ORDER BY $orden ASC";
+    }
+    $res = mysqli_query($conexion, $sql);
+    return $res;
+}
+
+function list_categorias($conexion){
+    $sql = "SELECT * FROM categorias";
+    $res = mysqli_query($conexion, $sql);
+    return $res;
 }
