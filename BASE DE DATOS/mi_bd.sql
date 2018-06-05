@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 04-06-2018 a las 23:07:39
+-- Tiempo de generación: 05-06-2018 a las 02:53:23
 -- Versión del servidor: 10.1.30-MariaDB
 -- Versión de PHP: 7.0.27
 
@@ -30,17 +30,18 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `categorias` (
   `id` int(10) NOT NULL,
-  `nombre` varchar(250) COLLATE utf8_spanish_ci NOT NULL
+  `nombre` varchar(250) COLLATE utf8_spanish_ci NOT NULL,
+  `descripcion` text COLLATE utf8_spanish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `categorias`
 --
 
-INSERT INTO `categorias` (`id`, `nombre`) VALUES
-(1, 'Mandos'),
-(2, 'Bartops'),
-(3, 'Componentes');
+INSERT INTO `categorias` (`id`, `nombre`, `descripcion`) VALUES
+(1, 'Mandos', 'Mandos arcade de todos los estilos. Para que puedas aporrearlos sin descanso'),
+(2, 'Bartops', 'Bartops arcade donde podras recordar los viejos tiempos desde el salon de tu casa.'),
+(3, 'Componentes', 'Componentes arcade para crear tus propios proyectos arcade.');
 
 -- --------------------------------------------------------
 
@@ -168,7 +169,7 @@ ALTER TABLE `imagenes`
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
