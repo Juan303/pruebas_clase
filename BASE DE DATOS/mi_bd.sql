@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-06-2018 a las 02:53:23
+-- Tiempo de generación: 06-06-2018 a las 01:37:46
 -- Versión del servidor: 10.1.30-MariaDB
 -- Versión de PHP: 7.0.27
 
@@ -41,7 +41,8 @@ CREATE TABLE `categorias` (
 INSERT INTO `categorias` (`id`, `nombre`, `descripcion`) VALUES
 (1, 'Mandos', 'Mandos arcade de todos los estilos. Para que puedas aporrearlos sin descanso'),
 (2, 'Bartops', 'Bartops arcade donde podras recordar los viejos tiempos desde el salon de tu casa.'),
-(3, 'Componentes', 'Componentes arcade para crear tus propios proyectos arcade.');
+(3, 'Componentes', 'Componentes arcade para crear tus propios proyectos arcade.'),
+(4, 'Arcades', 'Recreativas arcades completas');
 
 -- --------------------------------------------------------
 
@@ -76,7 +77,7 @@ CREATE TABLE `productos` (
   `nombre` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
   `descripcion_corta` text COLLATE utf8_spanish_ci NOT NULL,
   `descripcion` text COLLATE utf8_spanish_ci NOT NULL,
-  `precio` decimal(5,2) NOT NULL,
+  `precio` decimal(6,2) NOT NULL,
   `imagen` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
   `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
@@ -88,7 +89,10 @@ CREATE TABLE `productos` (
 INSERT INTO `productos` (`id`, `id_categoria`, `id_imagenes`, `nombre`, `descripcion_corta`, `descripcion`, `precio`, `imagen`, `fecha`) VALUES
 (2, 1, 1, 'Mando Arcade 2', 'Mando Arcade 2 bla bla bla', 'Mando Arcade 2 bla bla bla bla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla bla', '300.00', 'imagenes/productos/mando_1.jpg', '2018-05-31 00:17:19'),
 (3, 1, 2, 'Mando Arcade 3', 'Mando Arcade 3 bla bla bla', 'Mando Arcade 1 bla bla bla bla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla bla', '345.00', 'imagenes/productos/mando_2.jpg', '2018-05-31 00:17:18'),
-(4, 2, 0, 'Bartop Arcade', 'bartop arcade mega guay que puedes jugar a toh', 'Supermega bartop donde poder jugar a millones de juegos hasta que te sangren los muñones.', '650.00', 'imagenes/productos/bartop_1.jpg', '2018-06-03 22:16:25');
+(4, 2, 0, 'Bartop Arcade', 'bartop arcade mega guay que puedes jugar a toh', 'Supermega bartop donde poder jugar a millones de juegos hasta que te sangren los muñones.', '650.00', 'imagenes/productos/bartop_1.jpg', '2018-06-03 22:16:25'),
+(7, 3, 0, 'Conector USB pasamuros', 'Conector USB con rosca de 30 mm', 'Conector USB de buena calidad con la caracteristica de que se puede colocar sobre madera de distintos grosores', '0.00', 'imagenes/productos/mando_3.jpg', '2018-06-05 22:00:21'),
+(8, 3, 0, 'Conector JAMMA', 'Conector Jamma para recreativas', 'Conector estandar Jamma de 120 pines', '20.00', 'imagenes/productos/mando_3.jpg', '2018-06-05 22:01:24'),
+(9, 4, 0, 'Arcade Full God', 'Arcade completa', 'Arcade completa para ponerla en el salon y que tu mujer/marido te eche de casa al ver lo que te has gastado y lo fea que es.', '1075.00', 'imagenes/productos/mando_3.jpg', '2018-06-05 22:32:48');
 
 -- --------------------------------------------------------
 
@@ -157,7 +161,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `imagenes`
@@ -169,7 +173,7 @@ ALTER TABLE `imagenes`
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
