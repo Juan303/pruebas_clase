@@ -32,22 +32,7 @@ include "librerias/consultas_bd.php";
                 </div>
                 <div class="row">
                     <div class="col-12">
-                    <nav class="navbar navbar-expand-sm bg-light navbar-light">
-                        <ul class="navbar-nav">
-                            <?php 
-                                $categorias = list_categorias($conexion);
-                                while($categoria = mysqli_fetch_array($categorias)){ 
-                                    $active = "";
-                                    if(isset($_GET['categoria']) && $_GET['categoria'] == $categoria['id']){
-                                        $active = 'active';
-                                    }
-                            ?>
-                                <li class="nav-item <?=$active;?>">
-                                <a class="nav-link" href="?categoria=<?=$categoria['id'];?>"><?=$categoria['nombre'];?></a>
-                                </li>
-                            <?php } ?>
-                        </ul>
-                        </nav>
+                        <?php include 'plantillas/plantilla_nav_categorias.php' ?>
                     </div>
                    
                 </div>

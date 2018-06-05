@@ -63,6 +63,7 @@
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="admin_usuarios.php">Editar usuarios</a>
                                     <a class="dropdown-item" href="admin_productos.php">Editar productos</a>
+                                    <a class="dropdown-item" href="admin_categorias.php">Editar categorias</a>
                                 <?php } ?>
                             </div>
                         </div>

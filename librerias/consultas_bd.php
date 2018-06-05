@@ -134,6 +134,12 @@ function nombre_categoria($conexion, $id_categoria){
     $categoria = mysqli_fetch_array($consulta);
     return $categoria['nombre'];
 }
+function list_categorias($conexion)
+{
+    $sql = "SELECT * FROM categorias";
+    $res = mysqli_query($conexion, $sql);
+    return $res;
+}
 //=========================================================================================================PRODUCTOS
 function list_productos($conexion, $orden, $id_categoria)
 {
@@ -146,9 +152,25 @@ function list_productos($conexion, $orden, $id_categoria)
     $res = mysqli_query($conexion, $sql);
     return $res;
 }
+function registrar_producto($conexion, $array){
+    $nombre = $_POST['nombre'];
+    $id_categoria = $_POST['categoria'];
+    $consulta = mysqli_query($conexion, "SELECT * FROM productos WHERE id_categoria = '$id_categoria' AND nombre = '$nombre'");
+    //si la consulta nos da 0 resultados entonces procedemos a insertar el nuevo usuario
+    if ($consulta->num_rows == 0) {
+        $descripcion_corta = $array['descripcion_corta'];
+        $precio = $array['precio'];
+        $descripcion = $array['descripcion'];
+        $consulta = mysqli_query($conexion, "INSERT INTO `productos` (`id`, `id_categoria`, `id_imagenes`, `nombre`, `descripcion_corta`, `descripcion`, `precio`, `imagen`) VALUES (NULL, '$id_categoria', 0, '$nombre', '$descripcion_corta', '$descripcion', '$pre', 'imagenes/productos/mando_3.jpg');");
+        echo mysqli_error($conexion);
+        if ($consulta) {
+            return "Registro satisfactorio";
+        } else {
+            return "Fallo en la BD. prueba mas tarde";
+        }
+    } else {
+        return "Ya existe el producto [".$nombre."] en la categoria ".(nombre_categoria($conexion, $id_categoria))."!";
+    }
 
-function list_categorias($conexion){
-    $sql = "SELECT * FROM categorias";
-    $res = mysqli_query($conexion, $sql);
-    return $res;
 }
+
