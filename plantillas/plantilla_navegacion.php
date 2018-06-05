@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-warning bg-warning">
     <a class="h1" href="index.php">Mi WEB</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -31,7 +31,7 @@
             $email = $_POST['email_login'];
             $pass = $_POST['pass'];
             if(!login($conexion, $email, $pass)){
-                $error = "Nombre de usuario o contraseña incorrectos";
+                $error = "<p class='ml-1 text-danger font-weight-light font-italic'>Nombre de usuario o contraseña incorrectos</p>";
             }
         }
         else if(isset($_GET['salir'])){
@@ -43,12 +43,11 @@
             <form class="form-inline my-2 my-lg-0" method="post" action="">
                 <input class="form-control mr-sm-2" type="text" placeholder="Correo electronico" name="email_login" aria-label="Email">
                 <input class="form-control mr-sm-2" type="password" placeholder="Contraseña" name="pass" aria-label="pass">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Entrar</button>
+                <button class="btn btn-success my-2 my-sm-0" type="submit">Entrar</button>
             </form>
-            <a class="text-success ml-1" href="registro.php">Registrarse</a>
-            <p class="ml-1 text-danger font-weight-light font-italic">
-                <?=$error;?>
-            </p>
+            <a class="btn btn-sm mt-1 btn-primary ml-1" href="registro.php">Registrarte</a>
+            <?=$error;?>
+   
             <?php } else { ?>
                <ul class="navbar-nav">
                    <li class="nav-item dropdown">

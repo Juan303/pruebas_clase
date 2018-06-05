@@ -141,13 +141,13 @@ function list_categorias($conexion)
     return $res;
 }
 //=========================================================================================================PRODUCTOS
-function list_productos($conexion, $orden, $id_categoria)
+function list_productos($conexion, $orden, $tipo, $id_categoria)
 {
     if($id_categoria != "todos"){
-        $sql = "SELECT * FROM productos WHERE id_categoria = '$id_categoria' ORDER BY $orden ASC";
+        $sql = "SELECT * FROM productos WHERE id_categoria = '$id_categoria' ORDER BY $orden $tipo";
     }
     else{
-        $sql = "SELECT * FROM productos ORDER BY $orden ASC";
+        $sql = "SELECT * FROM productos ORDER BY $orden $tipo";
     }
     $res = mysqli_query($conexion, $sql);
     return $res;
@@ -161,7 +161,7 @@ function registrar_producto($conexion, $array){
         $descripcion_corta = $array['descripcion_corta'];
         $precio = $array['precio'];
         $descripcion = $array['descripcion'];
-        $consulta = mysqli_query($conexion, "INSERT INTO `productos` (`id`, `id_categoria`, `id_imagenes`, `nombre`, `descripcion_corta`, `descripcion`, `precio`, `imagen`) VALUES (NULL, '$id_categoria', 0, '$nombre', '$descripcion_corta', '$descripcion', '$pre', 'imagenes/productos/mando_3.jpg');");
+        $consulta = mysqli_query($conexion, "INSERT INTO `productos` (`id`, `id_categoria`, `id_imagenes`, `nombre`, `descripcion_corta`, `descripcion`, `precio`, `imagen`) VALUES (NULL, '$id_categoria', 0, '$nombre', '$descripcion_corta', '$descripcion', '$precio', 'imagenes/productos/mando_3.jpg');");
         echo mysqli_error($conexion);
         if ($consulta) {
             return "Registro satisfactorio";

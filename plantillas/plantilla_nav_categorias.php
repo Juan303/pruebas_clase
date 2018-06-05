@@ -1,4 +1,4 @@
- <nav class="navbar navbar-expand-sm bg-light navbar-light">
+ <nav class="navbar navbar-expand-sm  navbar-light">
     <ul class="navbar-nav">
         <li class="nav-item <?=$active;?>">
             <a class="btn btn-dark" href="?">Todos</a>
