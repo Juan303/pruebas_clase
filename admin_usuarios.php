@@ -51,7 +51,11 @@ include "librerias/consultas_bd.php";
                                     <?php
                             $res = list_usuarios($conexion);
                             while($row = mysqli_fetch_array($res)){
-                                echo "<tr><td>".$row['id']."</td><td>".$row['usuario']."</td><td>".$row['email']."</td><td><a href='?eliminar_id=".$row['id']."'>Eliminar</a></td></tr>";
+                                echo "<tr><td>".$row['id']."</td>
+                                            <td>".$row['usuario']."</td>
+                                            <td>".$row['email']."</td>
+                                            
+                                            <td><a href='?eliminar_id=".$row['id']."'>Eliminar</a></td></tr>";
                             } 
                         ?>
                                 </table>

@@ -174,3 +174,8 @@ function registrar_producto($conexion, $array){
 
 }
 
+//=============================================================================================================BUSCAR
+function buscar($conexion, $tabla, $campo, $cadena){
+    $consulta = mysqli_query($conexion, "SELECT * FROM $tabla WHERE $campo LIKE '%$cadena%'");
+    return $consulta;
+}

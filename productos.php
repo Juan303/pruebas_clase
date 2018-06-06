@@ -4,7 +4,11 @@ include "database/conexion_bd.php";
 include "librerias/consultas_bd.php";
 
 $titulo = "Últimos productos añadidos";
-if (isset($_GET['categoria'])) {
+if(isset($_POST['buscar'])){
+    $productos = buscar($conexion, 'productos', 'nombre', $_POST['texto']);
+    $titulo = "Buscando: <i>".$_POST['texto']."...</i>";
+}
+else if (isset($_GET['categoria'])) {
     $titulo = nombre_categoria($conexion, $_GET['categoria']);
     if(isset($_POST['ordenar'])){
         $productos = list_productos($conexion, $_POST['orden'], $_POST['tipo'], $_GET['categoria']);
@@ -48,18 +52,7 @@ else{
                 </div>
             
                 <div class="col-4">
-                    <form class="form-inline" action="" method="post">
-                    <small>Orden:</small>
-                        <select class="custom-select mr-2 ml-2 custom-select-sm" name="orden" id="orden">
-                            <option value="precio">Precio</option>
-                            <option value="nombre">Nombre</option>
-                        </select>
-                            <select class="custom-select mr-2 custom-select-sm" name="tipo" id="tipo">
-                            <option value="ASC">Ascendente</option>
-                            <option value="DESC">Descendente</option>
-                        </select>
-                    <button class="form-control btn-sm btn btn-success" type="submit" name="ordenar">Ordenar</button>
-                    </form>
+                   <?php include "plantillas/plantilla_buscador.php" ?>
                 </div>
             </div>
             <div class="row">
