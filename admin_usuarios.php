@@ -44,7 +44,8 @@ include "librerias/consultas_bd.php";
                                             <th scope="col">Id</th>
                                             <th scope="col">Usuario</th>
                                             <th scope="col">Email</th>
-                                            <th scope="col">Eliminar</th>
+                                            <th scope="col">Editar</th>
+                                             <th scope="col">Eliminar</th>
                                         </tr>
                                     </thead>
                                     <?php

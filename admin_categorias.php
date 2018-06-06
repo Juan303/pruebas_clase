@@ -34,11 +34,6 @@ include "librerias/consultas_bd.php";
                             }
                             ?>
                         <h2>Categorias Registradas</h2>
-                        <div class="row">
-                            <div class="col-12">
-                                <?php include 'plantillas/plantilla_nav_categorias.php'?>
-                            </div>
-                        </div>
                         <p>
                             <?=$mensaje_eliminar;?>
                         </p>

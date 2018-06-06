@@ -27,7 +27,7 @@ include "librerias/consultas_bd.php";
                             if (isset($_GET['eliminar_id'])) {
                                 if (is_admin($conexion, $_SESSION['email'])) {
                                     $id = $_GET['eliminar_id'];
-                                    $mensaje_eliminar = eliminar_registro($conexion, $id, "productos");
+                                    $mensaje_eliminar = eliminar_registro($conexion, $id, 'ASC', "productos");
                                 } else {
                                     $mensaje_eliminar = "solo puedes eliminar siendo administrador";
                                 }
@@ -51,6 +51,7 @@ include "librerias/consultas_bd.php";
                                     <th scope="col">Descripcion larga</th>
                                     <th scope="col">Precio</th>
                                     <th scope="col">Fecha</th>
+                                    <th scope="col">Visibilidad</th>
                                     <th scope="col">Editar</th>
                                     <th scope="col">Eliminar</th>
                                 </tr>
@@ -60,7 +61,7 @@ include "librerias/consultas_bd.php";
                                 if (isset($_GET['categoria'])) {
                                     $id_categoria = $_GET['categoria'];
                                 }
-                                $res = list_productos($conexion, 'fecha', $id_categoria);
+                                $res = list_productos($conexion, 'fecha', 'ASC', $id_categoria);
                                 while ($row = mysqli_fetch_array($res)) {
                                     echo "<tr>
                                                 <td>" . $row['id'] . "</td>
@@ -69,6 +70,7 @@ include "librerias/consultas_bd.php";
                                                 <td>" . $row['descripcion'] . "</td>
                                                 <td>" . $row['precio'] . "</td>
                                                 <td>" . $row['fecha'] . "</td>
+                                                <td></td>
                                                 <td><a class='btn btn-warning' href='editar_producto.php?eliminar_id=" . $row['id'] . "'>Editar</a></td>
                                                 <td><a class='btn btn-danger' href='?eliminar_id=" . $row['id'] . "'>Eliminar</a></td>
                                             </tr>";
