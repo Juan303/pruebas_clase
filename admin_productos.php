@@ -1,25 +1,29 @@
 <?php
-session_start();
-include "database/conexion_bd.php";
-include "librerias/consultas_bd.php";
-$titulo = "Productos registrados";
-if (isset($_POST['buscar'])) {
-    $productos = buscar($conexion, 'productos', 'nombre', $_POST['texto']);
-    $titulo = "Buscando: <i>" . $_POST['texto'] . "...</i>";
-} else if (isset($_GET['categoria'])) {
-    $titulo = nombre_categoria($conexion, $_GET['categoria']);
-    if (isset($_POST['ordenar'])) {
-        $productos = list_productos($conexion, $_POST['orden'], $_POST['tipo'], $_GET['categoria']);
-    } else {
-        $productos = list_productos($conexion, 'fecha', "ASC", $_GET['categoria']);
+    session_start();
+    include "database/conexion_bd.php";
+    include "librerias/consultas_bd.php";
+    $titulo = "Productos registrados";
+    $mensaje = "";
+    if (isset($_GET['eliminar_id'])) {
+        $mensaje = eliminar_registro($conexion, $_GET['eliminar_id'], 'productos');
     }
-} else if (isset($_POST['ordenar'])) {
-    $productos = list_productos($conexion, $_POST['orden'], $_POST['tipo'], "todos");
-} else {
-    $productos = list_productos($conexion, 'fecha', "ASC", "todos");
-}
 
-
+    if (isset($_GET['categoria'])) {
+        $titulo = nombre_categoria($conexion, $_GET['categoria']);
+        if (isset($_POST['ordenar'])) {
+            $productos = list_registros($conexion, 'productos', $_POST['orden'], $_POST['tipo'], $_GET['categoria']);
+        } else {
+            $productos = list_registros($conexion, 'productos', 'fecha', "ASC", $_GET['categoria']);
+        }
+    }
+    else if (isset($_POST['buscar'])) {
+        $productos = buscar($conexion, 'productos', 'nombre', $_POST['texto']);
+        $titulo = "Buscando: <i>" . $_POST['texto'] . "...</i>";
+    }else if (isset($_POST['ordenar'])) {
+        $productos = list_registros($conexion, 'productos', $_POST['orden'], $_POST['tipo'], "todos");
+    } else {
+        $productos = list_registros($conexion, 'productos', 'fecha', "ASC", "todos");
+    }
 ?>
     <!doctype html>
     <html lang="es">
@@ -59,9 +63,9 @@ if (isset($_POST['buscar'])) {
                                 <?php include "plantillas/plantilla_buscador.php"?>
                             </div>
                         </div>
-                        <p>
-                            <?=$mensaje_eliminar;?>
-                        </p>
+                        
+                        <?=$mensaje;?>
+                        
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
@@ -85,8 +89,8 @@ if (isset($_POST['buscar'])) {
                                         <td><?=$row['descripcion'];?></td>
                                         <td><?=$row['precio'];?></td>
                                         <td><?= $row['fecha'];?></td>
-                                        <td></td>
-                                        <td><a class='btn btn-warning' data-toggle="modal" data-target="#myModal_<?=$row['id'];?>" href=''>Editar</a></td>
+                                        <td><?= $row['visibilidad'];?></td>
+                                        <td><a class='btn btn-warning' href='editar_producto.php?producto_id=<?=$row['id'];?>'>Editar</a></td>
                                         <td><a class='btn btn-danger' href='?eliminar_id=<?=$row['id'];?>'>Eliminar</a></td>
                                     </tr>
                                     <div id="myModal_<?=$row['id'];?>" class="modal fade" role="dialog">
@@ -124,6 +128,13 @@ if (isset($_POST['buscar'])) {
                                                         <div class="form-group m-0">
                                                             <label for="descripcion_corta">Descripción</label>
                                                             <textarea class="form-control" value="<?=$row['descripcion'];?>" name="descripcion" rows="10" id="descripcion"><?=$row['descripcion'];?></textarea>
+                                                        </div>
+                                                        <div class="form-group m-0">
+                                                            Visibilidad:
+                                                            <label for="si">Si</label>
+                                                            <input type="radio" name="visibilidad" id="si" value="si" />
+                                                            <label for="no">No</label>
+                                                            <input type="radio" name="visibilidad" id="no" value="no" />
                                                         </div>
                                                         <button type="submit" class="btn btn-primary" name="editar">Editar</button>
                                                         <button type="reset" class="btn btn-warning">Restablecer</button>

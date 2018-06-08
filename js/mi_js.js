@@ -11,3 +11,4 @@ function toggle_input_pass(elem){
         }
     }
 }
+

@@ -6,8 +6,6 @@ function list_usuarios($conexion)
     $res = mysqli_query($conexion, $sql);
     return $res;
 }
-
-
 function extraer_usuario($conexion, $email)
 {
     $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE email = '$email'");
@@ -119,15 +117,7 @@ function is_admin($conexion, $email)
     }
     return false;
 }
-function eliminar_registro($conexion, $id, $tabla)
-{
-    $consulta = mysqli_query($conexion, "DELETE FROM $tabla WHERE id = '$id'");
-    if ($consulta) {
-        return "Registro eliminado con exito";
 
-    }
-    return "Ha habido problemas para eliminar el registro";
-}
 //=========================================================================================================CATEGORIAS
 function nombre_categoria($conexion, $id_categoria){
     $consulta = mysqli_query($conexion, "SELECT nombre FROM categorias WHERE id = '$id_categoria'");
@@ -141,20 +131,34 @@ function list_categorias($conexion)
     return $res;
 }
 //=========================================================================================================PRODUCTOS
-function list_productos($conexion, $orden, $tipo, $id_categoria)
-{
-    if($id_categoria != "todos"){
-        $sql = "SELECT * FROM productos WHERE id_categoria = '$id_categoria' ORDER BY $orden $tipo";
+
+function editar_producto($conexion, $array, $id){
+    $nombre = $array['nombre'];
+    $id_categoria = $array['categoria'];
+    $consulta = mysqli_query($conexion, "SELECT * FROM productos WHERE id_categoria = '$id_categoria' AND nombre = '$nombre'");
+    $registro = extraer_registro($conexion, 'productos', $id);
+    //si la consulta nos da 0 resultados entonces procedemos a insertar el nuevo usuario
+    if ($consulta->num_rows == 0 || $registro['nombre']==$array['nombre']) {
+        $descripcion_corta = $array['descripcion_corta'];
+        $precio = $array['precio'];
+        $descripcion = $array['descripcion'];
+        $visibilidad = $array['visibilidad'];
+        $consulta = mysqli_query($conexion, "UPDATE `productos` SET `visibilidad` = '$visibilidad', `id_categoria` = '$id_categoria', `nombre` = '$nombre',`descripcion_corta` = '$descripcion_corta',`descripcion` = '$descripcion',`precio` = '$precio' WHERE `productos`.`id` = '$id'");
+        echo mysqli_error($conexion);
+        if ($consulta) {
+            return "Modificacion correcta";
+        } else {
+            return "Fallo en la BD. prueba mas tarde";
+        }
+    } else {
+        return "Ya existe el producto [".$nombre."] en la categoria ".(nombre_categoria($conexion, $id_categoria))."!";
     }
-    else{
-        $sql = "SELECT * FROM productos ORDER BY $orden $tipo";
-    }
-    $res = mysqli_query($conexion, $sql);
-    return $res;
+
 }
-function registrar_producto($conexion, $array){
-    $nombre = $_POST['nombre'];
-    $id_categoria = $_POST['categoria'];
+function registrar_producto($conexion, $array)
+{
+    $nombre = $array['nombre'];
+    $id_categoria = $array['categoria'];
     $consulta = mysqli_query($conexion, "SELECT * FROM productos WHERE id_categoria = '$id_categoria' AND nombre = '$nombre'");
     //si la consulta nos da 0 resultados entonces procedemos a insertar el nuevo usuario
     if ($consulta->num_rows == 0) {
@@ -169,13 +173,42 @@ function registrar_producto($conexion, $array){
             return "Fallo en la BD. prueba mas tarde";
         }
     } else {
-        return "Ya existe el producto [".$nombre."] en la categoria ".(nombre_categoria($conexion, $id_categoria))."!";
+        return "Ya existe el producto [" . $nombre . "] en la categoria " . (nombre_categoria($conexion, $id_categoria)) . "!";
     }
 
 }
+
 
 //=============================================================================================================BUSCAR
 function buscar($conexion, $tabla, $campo, $cadena){
     $consulta = mysqli_query($conexion, "SELECT * FROM $tabla WHERE $campo LIKE '%$cadena%'");
     return $consulta;
+}
+
+//=============================================================================================================GENERALES
+
+function list_registros($conexion, $tabla, $orden, $tipo, $id_categoria)
+{
+    if ($id_categoria != "todos") {
+        $sql = "SELECT * FROM $tabla WHERE id_categoria = '$id_categoria' ORDER BY $orden $tipo";
+    } else {
+        $sql = "SELECT * FROM $tabla ORDER BY $orden $tipo";
+    }
+    $consulta = mysqli_query($conexion, $sql);
+    return $consulta;
+}
+
+function eliminar_registro($conexion, $id, $tabla)
+{
+    $consulta = mysqli_query($conexion, "DELETE FROM $tabla WHERE id = '$id'");
+    if ($consulta) {
+        return "<div class='alert alert-success' role='alert'>Registro eliminado con exito</div>";
+
+    }
+    return "<div class='alert alert-warning' role='alert'>Ha habido problemas para eliminar el registro</div>";
+}
+function extraer_registro($conexion, $tabla, $id){
+    $consulta = mysqli_query($conexion, "SELECT * FROM $tabla WHERE id = '$id'");
+    $registro = mysqli_fetch_array($consulta);
+    return $registro;
 }

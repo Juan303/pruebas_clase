@@ -11,17 +11,17 @@ if(isset($_POST['buscar'])){
 else if (isset($_GET['categoria'])) {
     $titulo = nombre_categoria($conexion, $_GET['categoria']);
     if(isset($_POST['ordenar'])){
-        $productos = list_productos($conexion, $_POST['orden'], $_POST['tipo'], $_GET['categoria']);
+        $productos = list_registros($conexion, 'productos',$_POST['orden'], $_POST['tipo'], $_GET['categoria']);
     }
     else{
-        $productos = list_productos($conexion, 'fecha', "ASC",  $_GET['categoria']);
+        $productos = list_registros($conexion, 'productos','fecha', "ASC",  $_GET['categoria']);
     }
 }
 else if(isset($_POST['ordenar'])){
-    $productos = list_productos($conexion, $_POST['orden'], $_POST['tipo'], "todos"); 
+    $productos = list_registros($conexion, 'productos',$_POST['orden'], $_POST['tipo'], "todos"); 
 }
 else{
-    $productos = list_productos($conexion, 'fecha', "ASC", "todos");
+    $productos = list_registros($conexion, 'productos','fecha', "ASC", "todos");
 }
 ?>
     <!doctype html>
@@ -57,7 +57,8 @@ else{
             </div>
             <div class="row">
             <?php 
-                while($producto = mysqli_fetch_array($productos)){ 
+                while($producto = mysqli_fetch_array($productos)){
+                    if($producto['visibilidad']=='si'){
             ?>
                 <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="card mb-2">
@@ -70,7 +71,7 @@ else{
                         </div>
                     </div>
                 </div>
-                <?php } ?>
+                <?php } }?>
             </div>
         </div>
         <div class="container-fluid">
