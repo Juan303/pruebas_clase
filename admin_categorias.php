@@ -50,19 +50,17 @@ include "librerias/consultas_bd.php";
                             <?php
                                
                                 $res = list_categorias($conexion);
-                                while ($row = mysqli_fetch_array($res)) {
-                                    echo "<tr>
-                                                <td>" . $row['id'] . "</td>
-                                                <td>" . $row['nombre'] . "</td>
-                                                <td>" . $row['descripcion'] . "</td>
-                                                <td><a class='btn btn-warning' href='editar_producto.php?eliminar_id=" . $row['id'] . "'>Editar</a></td>
-                                                <td><a class='btn btn-danger' href='?eliminar_id=" . $row['id'] . "'>Eliminar</a></td>
-                                            </tr>";
-                                }
-                            ?>
-
+                                while ($row = mysqli_fetch_array($res)) { ?>
+                                   <tr>
+                                    <td><?=$row['id'];?></td>
+                                    <td><?=$row['nombre'];?></td>
+                                    <td><?=$row['descripcion'];?></td>
+                                    <td><a class='btn btn-warning' href='editar_producto.php?eliminar_id=<?=$row['id'];?>'>Editar</a></td>
+                                    <td><a class='btn btn-danger' href='?eliminar_id=<?=$row['id'];?>'>Eliminar</a></td>
+                                </tr>
+                              <?php } ?>
                         </table>
-                        <a class="btn btn-success" href="registrar_producto.php">Registrar producto</a>
+                        <a class="btn btn-success" href="registrar_producto.php">Registrar categoria</a>
                     </div>
                 </div>
             </div>

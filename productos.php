@@ -67,6 +67,7 @@ else{
                             <h5 class="card-title"><?=$producto['nombre'];?> <small class="text-muted font-italic">(<?=nombre_categoria($conexion,$producto['id_categoria']);?>)</small></h5>
                             <p class="card-text"><?=$producto['descripcion_corta'];?></p>
                             <a href="#" class="btn btn-primary">Detalles...</a>
+                            <a href="?agregar_carrito=1&id=<?=$producto['id'];?>" class="btn btn-primary"><i class="material-icons">add_shopping_cart</i></a>
                             <h5 class="float-right text-success"><?=$producto['precio'];?>€</h5>
                         </div>
                     </div>

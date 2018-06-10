@@ -1,3 +1,6 @@
+<?php 
+include_once "database/conexion_bd.php";
+include_once "librerias/carrito.php"; ?>
 <nav class="navbar navbar-expand-lg navbar-warning bg-warning">
     <a class="h1" href="index.php">Mi WEB</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -5,7 +8,7 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav mr-auto ml-2">
             <!--<li class="nav-item active">
                 <a class="nav-link" href="index.php">Inicio <span class="sr-only">(current)</span></a>
             </li>
@@ -23,8 +26,46 @@
             <li class="nav-item">
                 <a class="nav-link" href="productos.php">Productos</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="">Contacto</a>
+            </li>
         </ul>
-        <div>
+        <div class="dropdown mr-2">
+            <?php
+                if(isset($_GET['agregar_carrito'])){
+                    agregar_articulo($conexion, $_GET['id']);
+                }
+                else if(isset($_GET['vaciar_carrito'])){
+                    vaciar_carrito();
+                }
+            ?>
+            <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="carritoButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Carrito <?php if(isset($_SESSION['carrito'])){ echo "(".count($_SESSION['carrito']).")";} ?>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="carritoButton" style="width:250px;">
+                <h5>Mi cesta...</h5>
+                <?php if(isset($_SESSION['carrito'])){ ?>
+                    <table class="table">
+                        <?php foreach($_SESSION['carrito'] as $indice => $valor){ ?>
+                              <tr>
+                                  <td colspan="2"><?=$indice;?></td>
+                              </tr>
+                              <tr>
+                                  <td>Precio: <?=$valor['precio'];?></td>
+                                  <td>Cantidad: <?=$valor['cantidad'];?></td>
+                              </tr>   
+                        <?php } ?>
+                        <tr>
+                            <td colspan="2">
+                                <a href="?vaciar_carrito" class="btn btn-sm btn-warning">Vaciar...</a>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                <?php } ?>
+            </div>
+        </div>   
+    
         <?php
         $error = "";
         if(isset($_POST['email_login'])){
@@ -41,11 +82,11 @@
         }
         if(!isset($_SESSION['email'])) { ?>
             <form class="form-inline my-2 my-lg-0" method="post" action="">
-                <input class="form-control mr-sm-2" type="text" placeholder="Correo electronico" name="email_login" aria-label="Email">
-                <input class="form-control mr-sm-2" type="password" placeholder="Contraseña" name="pass" aria-label="pass">
-                <button class="btn btn-success my-2 my-sm-0" type="submit">Entrar</button>
+                <input class="form-control form-control-sm mr-sm-2" type="text" placeholder="Correo electronico" name="email_login" aria-label="Email">
+                <input class="form-control form-control-sm mr-sm-2" type="password" placeholder="Contraseña" name="pass" aria-label="pass">
+                <button class="btn btn-sm btn-success my-2 my-sm-0" type="submit">Entrar</button>
             </form>
-            <a class="btn btn-sm mt-1 btn-primary ml-1" href="registro.php">Registrarte</a>
+            <a class="btn btn-sm btn-primary ml-2" href="registro.php">Registrarte</a>
             <?=$error;?>
    
             <?php } else { ?>
@@ -69,6 +110,7 @@
                     </li>
                 </ul>
             <?php } ?>
-        </div>
+        
+        
     </div>
 </nav>
