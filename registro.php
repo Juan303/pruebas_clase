@@ -2,6 +2,9 @@
 session_start();
 include "database/conexion_bd.php";
 include "librerias/consultas_bd.php";
+include "librerias/PHPMailer/config.php";
+
+
 
 ?>
 <!doctype html>
@@ -24,7 +27,18 @@ include "librerias/consultas_bd.php";
                         <?php
                         $mensaje = "";
                         if (isset($_POST['email_r'])) {
-                            $mensaje = insertar_usuario($conexion, $_POST);
+                            $codigo = crypt(rand(0,10000), 'rl');
+                            $mail->AddAddress($_POST['email_r']); // Esta es la dirección a donde enviamos
+                            $mail->Subject = "Registro"; // Este es el titulo del email.
+                            $mail->Body = "Haz click en el siguiente link para activar tu cuenta <a href='localhost:8000/php/Proyecto_1_BD/activar_cuenta.php?codigo=".$codigo."&email=".$_POST['email_r']."'>ACTIVAR CUENTA</a>"; // Mensaje a enviar.
+                            // Envía el correo.
+                            if($mail->Send()){
+                                $mansaje = "El correo fue enviado correctamente.<br/>";
+                                $mensaje .= insertar_usuario($conexion, $_POST, $codigo);
+                            }else{ 
+                                echo "Hubo un problema. Contacta a un administrador."; 
+                            } 
+                           
                         }
                         ?>
                         <h2>Registro de usuarios</h2>

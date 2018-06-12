@@ -14,20 +14,20 @@ function extraer_usuario($conexion, $email)
 }
 function login($conexion, $email, $pass)
 {
+    $pass = crypt($pass, 'rl');
     $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE email = '$email'");
     print_r(mysqli_error($conexion));
     if ($consulta->num_rows > 0) {
         $row = mysqli_fetch_array($consulta);
-        if ($pass == $row['pass']) {
+        if ($pass == $row['pass'] && $row['estado'] != 'desactivada') {
             $_SESSION['email'] = $row['email'];
             $_SESSION['usuario'] = $row['usuario'];
-            //header("refresh:0;");
             return true;
         }
     }
     return false;
 }
-function insertar_usuario($conexion, $array)
+function insertar_usuario($conexion, $array, $codigo)
 {
     //extraigo el mail para comprobar si esta en la base de datos
     $email = $_POST['email_r'];
@@ -37,8 +37,8 @@ function insertar_usuario($conexion, $array)
         $usuario = $array['usuario_r'];
         $nombre = $array['nombre'];
         $apellidos = $array['apellidos'];
-        $pass = $array['pass_r'];
-        $consulta = mysqli_query($conexion, "INSERT INTO `usuarios` (`id`, `email`, `pass`, `usuario`, `nombre`, `apellidos`) VALUES (NULL, '$email', '$pass', '$usuario', '$nombre', '$apellidos');");
+        $pass = crypt($array['pass_r'], 'rl');
+        $consulta = mysqli_query($conexion, "INSERT INTO `usuarios` (`id`, `email`, `pass`, `usuario`, `nombre`, `apellidos`, `codigo_activacion`, `estado`) VALUES (NULL, '$email', '$pass', '$usuario', '$nombre', '$apellidos', '$codigo', 'desactivada');");
         if ($consulta) {
             return "Registro satisfactorio";
         } else {
@@ -87,7 +87,7 @@ function actualizar_pass($conexion, $pass_antigua, $pass_nueva, $pass_nueva_r, $
     if($pass_nueva == $pass_nueva_r){
         $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE email = '$email'");
         $registro = mysqli_fetch_array($consulta);
-        if($registro['pass'] == $pass_antigua){
+        if($registro['pass'] == crypt($pass_antigua, 'rl')){
             $consulta = mysqli_query($conexion, "UPDATE `usuarios` SET `pass` = '$pass_nueva' WHERE `usuarios`.`email` = '$email'");
             if($consulta){
                 return "<div class='alert alert-success' role='alert'>Contraseña cambiada satisfactoriamente</div>";
@@ -211,4 +211,23 @@ function extraer_registro($conexion, $tabla, $id){
     $consulta = mysqli_query($conexion, "SELECT * FROM $tabla WHERE id = '$id'");
     $registro = mysqli_fetch_array($consulta);
     return $registro;
+}
+//===============================================================================================================ACTIVAR CUENTA
+function activar_cuenta($conexion, $codigo, $email){
+    $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE email = '$email'");
+    $registro = mysqli_fetch_array($consulta);
+    if($registro['codigo_activacion'] == $codigo){
+        $consulta = mysqli_query($conexion, "UPDATE usuarios SET estado = 'activada' WHERE email = '$email'");
+        if($consulta){
+            return "<div class='alert alert-success'>Cuenta activada</div>";
+        }
+        else{
+            return "<div class='alert alert-danger'>Error al activar la cuenta</div>";
+        }
+    }
+    else{
+        return "<div class='alert alert-danger'>Codigo de activacion incorrecto</div>";
+    }
+
+
 }
