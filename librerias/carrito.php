@@ -8,7 +8,8 @@ function vaciar_carrito(){
 function agregar_articulo($conexion, $id){
     $articulo = extraer_registro($conexion, 'productos', $id);
     if(!isset($_SESSION['carrito'])){
-        $_SESSION['carrito'] = array($articulo['nombre'] => array('precio' => $articulo['precio'],
+        $_SESSION['carrito'] = array($articulo['nombre'] => array('id' => $articulo['id'],
+                                                                  'precio' => $articulo['precio'],
                                                                   'cantidad' => 1));
     }
     else{
@@ -21,12 +22,21 @@ function agregar_articulo($conexion, $id){
             }
         }
         if(!$encontrado){
-            $_SESSION['carrito'][$articulo['nombre']] = array('precio' => $articulo['precio'],
-                                                                'cantidad' => 1);
+            $_SESSION['carrito'][$articulo['nombre']] = array('id' => $articulo['id'],
+                                                              'precio' => $articulo['precio'],
+                                                              'cantidad' => 1);
         }
     }
 }
-
+function cuenta_articulos(){
+    if(isset($_SESSION['carrito'])){
+        $n_items = 0;
+        foreach($_SESSION['carrito'] as $indice => $valor){
+            $n_items += $valor['cantidad'];
+        }
+    }
+    return $n_items;
+}
 
 
 

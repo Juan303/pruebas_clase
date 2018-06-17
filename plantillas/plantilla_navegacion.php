@@ -39,31 +39,28 @@ include_once "librerias/carrito.php"; ?>
                     vaciar_carrito();
                 }
             ?>
-            <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="carritoButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Carrito <?php if(isset($_SESSION['carrito'])){ echo "(".count($_SESSION['carrito']).")";} ?>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="carritoButton" style="width:250px;">
-                <h5>Mi cesta...</h5>
-                <?php if(isset($_SESSION['carrito'])){ ?>
-                    <table class="table">
-                        <?php foreach($_SESSION['carrito'] as $indice => $valor){ ?>
-                              <tr>
-                                  <td colspan="2"><?=$indice;?></td>
-                              </tr>
-                              <tr>
-                                  <td>Precio: <?=$valor['precio'];?></td>
-                                  <td>Cantidad: <?=$valor['cantidad'];?></td>
-                              </tr>   
-                        <?php } ?>
-                        <tr>
-                            <td colspan="2">
-                                <a href="?vaciar_carrito" class="btn btn-sm btn-warning">Vaciar...</a>
-                            </td>
-                        </tr>
-                    </table>
-                    
-                <?php } ?>
-            </div>
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <div class="btn-group">
+                        <button class="btn btn-info dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Carrito 
+                                <?php 
+                                    if(isset($_SESSION['carrito'])){
+                                        echo "(".cuenta_articulos().")";
+                                        $msj_carrito = "...";
+                                    }
+                                    else{
+                                        $msj_carrito = " vacia...";
+                                    }
+                                ?>
+                                <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <?php include_once "plantillas/carrito/plantilla_carrito.php";?>
+                        </div>
+                    </div>
+                </li>
+            </ul>
         </div>   
     
         <?php

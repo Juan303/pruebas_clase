@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-06-2018 a las 01:37:46
+-- Tiempo de generación: 18-06-2018 a las 01:02:23
 -- Versión del servidor: 10.1.30-MariaDB
 -- Versión de PHP: 7.0.27
 
@@ -67,6 +67,31 @@ INSERT INTO `imagenes` (`id`, `link`, `alt`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `pedidos`
+--
+
+CREATE TABLE `pedidos` (
+  `id` int(10) NOT NULL,
+  `id_cliente` int(20) NOT NULL,
+  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `pagado` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pedidos_productos`
+--
+
+CREATE TABLE `pedidos_productos` (
+  `id` int(11) NOT NULL,
+  `id_pedido` int(11) NOT NULL,
+  `id_producto` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `productos`
 --
 
@@ -79,20 +104,19 @@ CREATE TABLE `productos` (
   `descripcion` text COLLATE utf8_spanish_ci NOT NULL,
   `precio` decimal(6,2) NOT NULL,
   `imagen` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
-  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `visibilidad` enum('si','no') COLLATE utf8_spanish_ci NOT NULL DEFAULT 'si'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `productos`
 --
 
-INSERT INTO `productos` (`id`, `id_categoria`, `id_imagenes`, `nombre`, `descripcion_corta`, `descripcion`, `precio`, `imagen`, `fecha`) VALUES
-(2, 1, 1, 'Mando Arcade 2', 'Mando Arcade 2 bla bla bla', 'Mando Arcade 2 bla bla bla bla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla bla', '300.00', 'imagenes/productos/mando_1.jpg', '2018-05-31 00:17:19'),
-(3, 1, 2, 'Mando Arcade 3', 'Mando Arcade 3 bla bla bla', 'Mando Arcade 1 bla bla bla bla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla bla', '345.00', 'imagenes/productos/mando_2.jpg', '2018-05-31 00:17:18'),
-(4, 2, 0, 'Bartop Arcade', 'bartop arcade mega guay que puedes jugar a toh', 'Supermega bartop donde poder jugar a millones de juegos hasta que te sangren los muñones.', '650.00', 'imagenes/productos/bartop_1.jpg', '2018-06-03 22:16:25'),
-(7, 3, 0, 'Conector USB pasamuros', 'Conector USB con rosca de 30 mm', 'Conector USB de buena calidad con la caracteristica de que se puede colocar sobre madera de distintos grosores', '0.00', 'imagenes/productos/mando_3.jpg', '2018-06-05 22:00:21'),
-(8, 3, 0, 'Conector JAMMA', 'Conector Jamma para recreativas', 'Conector estandar Jamma de 120 pines', '20.00', 'imagenes/productos/mando_3.jpg', '2018-06-05 22:01:24'),
-(9, 4, 0, 'Arcade Full God', 'Arcade completa', 'Arcade completa para ponerla en el salon y que tu mujer/marido te eche de casa al ver lo que te has gastado y lo fea que es.', '1075.00', 'imagenes/productos/mando_3.jpg', '2018-06-05 22:32:48');
+INSERT INTO `productos` (`id`, `id_categoria`, `id_imagenes`, `nombre`, `descripcion_corta`, `descripcion`, `precio`, `imagen`, `fecha`, `visibilidad`) VALUES
+(4, 2, 0, 'Bartop Arcade', 'bartop arcade mega guay que puedes jugar a toh', 'Supermega bartop donde poder jugar a millones de juegos hasta que te sangren los muñones.', '651.00', 'imagenes/productos/bartop_1.jpg', '2018-06-03 22:16:25', 'si'),
+(7, 3, 0, 'Conector USB pasamuros guay', 'Conector USB con rosca de 30 mm', 'Conector USB de buena calidad con la caracteristica de que se puede colocar sobre madera de distintos grosores', '15.00', 'imagenes/productos/mando_3.jpg', '2018-06-05 22:00:21', 'si'),
+(8, 3, 0, 'Conector JAMMA', 'Conector Jamma para recreativas', 'Conector estandar Jamma de 120 pines', '20.00', 'imagenes/productos/mando_3.jpg', '2018-06-05 22:01:24', 'si'),
+(9, 4, 0, 'Arcade Full God', 'Arcade completa', 'Arcade completa para ponerla en el salon y que tu mujer/marido te eche de casa al ver lo que te has gastado y lo fea que es.', '1075.00', 'imagenes/productos/mando_3.jpg', '2018-06-05 22:32:48', 'si');
 
 -- --------------------------------------------------------
 
@@ -108,21 +132,23 @@ CREATE TABLE `usuarios` (
   `email` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
   `pass` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
   `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `rol` varchar(255) COLLATE utf8_spanish_ci NOT NULL DEFAULT 'user'
+  `rol` varchar(255) COLLATE utf8_spanish_ci NOT NULL DEFAULT 'user',
+  `codigo_activacion` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
+  `estado` enum('activada','desactivada') COLLATE utf8_spanish_ci NOT NULL DEFAULT 'desactivada'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`id`, `usuario`, `nombre`, `apellidos`, `email`, `pass`, `fecha`, `rol`) VALUES
-(1, 'pepe2', 'Pepe', 'Sancho', 'pepe@pepe.com', '123456', '2018-05-21 21:59:27', 'user'),
-(2, 'paco2', 'Paco', 'Gutierrez', 'paco1@paco.com', '12345697783', '2018-05-21 21:59:27', 'user'),
-(3, 'maria', 'Maria', 'de Villota', 'maria@maria.com', '1234', '2018-05-21 21:59:27', 'user'),
-(4, 'jaime', 'Jaime', 'Urrutia', 'jaime@jaime.com', '2365478', '2018-05-21 21:59:27', 'user'),
-(5, 'laia', 'Laia', 'Palau', 'laia@laia.com', '14587965', '2018-05-21 21:59:27', 'user'),
-(6, 'bob303', 'Juan Esteban', 'Sanchez de la Torre', 'gdf000@hotmail.com', '2501303', '2018-05-29 21:46:35', 'admin'),
-(8, 'neo303', 'Juanes', 'Sanchez', 'informasterjuan@gmail.com', '1234', '2018-05-29 23:30:25', 'user');
+INSERT INTO `usuarios` (`id`, `usuario`, `nombre`, `apellidos`, `email`, `pass`, `fecha`, `rol`, `codigo_activacion`, `estado`) VALUES
+(1, 'pepe2', 'Pepe', 'Sancho', 'pepe@pepe.com', '123456', '2018-05-21 21:59:27', 'user', '0', 'desactivada'),
+(2, 'paco2', 'Paco', 'Gutierrez', 'paco1@paco.com', '12345697783', '2018-05-21 21:59:27', 'user', '0', 'desactivada'),
+(3, 'maria', 'Maria', 'de Villota', 'maria@maria.com', '1234', '2018-05-21 21:59:27', 'user', '0', 'desactivada'),
+(4, 'jaime', 'Jaime', 'Urrutia', 'jaime@jaime.com', '2365478', '2018-05-21 21:59:27', 'user', '0', 'desactivada'),
+(5, 'laia', 'Laia', 'Palau', 'laia@laia.com', '14587965', '2018-05-21 21:59:27', 'user', '0', 'desactivada'),
+(8, 'neo303', 'Juanes', 'Sanchez', 'informasterjuan@gmail.com', '1234', '2018-05-29 23:30:25', 'user', '0', 'desactivada'),
+(15, 'bob303', 'Juan Esteban', 'Sanchez de la Torre', 'gdf000@hotmail.com', '2501303', '2018-06-12 21:39:53', 'user', 'rl/ou.1NF6neo', 'activada');
 
 --
 -- Índices para tablas volcadas
@@ -139,6 +165,21 @@ ALTER TABLE `categorias`
 --
 ALTER TABLE `imagenes`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `pedidos`
+--
+ALTER TABLE `pedidos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_cliente` (`id_cliente`);
+
+--
+-- Indices de la tabla `pedidos_productos`
+--
+ALTER TABLE `pedidos_productos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `pedidos` (`id_pedido`),
+  ADD KEY `productos` (`id_producto`);
 
 --
 -- Indices de la tabla `productos`
@@ -170,6 +211,18 @@ ALTER TABLE `imagenes`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT de la tabla `pedidos`
+--
+ALTER TABLE `pedidos`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT de la tabla `pedidos_productos`
+--
+ALTER TABLE `pedidos_productos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
@@ -179,11 +232,24 @@ ALTER TABLE `productos`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Restricciones para tablas volcadas
 --
+
+--
+-- Filtros para la tabla `pedidos`
+--
+ALTER TABLE `pedidos`
+  ADD CONSTRAINT `pedidos_ibfk_1` FOREIGN KEY (`id_cliente`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `pedidos_productos`
+--
+ALTER TABLE `pedidos_productos`
+  ADD CONSTRAINT `pedidos` FOREIGN KEY (`id_pedido`) REFERENCES `pedidos` (`id`),
+  ADD CONSTRAINT `productos` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id`);
 
 --
 -- Filtros para la tabla `productos`

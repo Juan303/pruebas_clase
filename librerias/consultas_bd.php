@@ -177,7 +177,26 @@ function registrar_producto($conexion, $array)
     }
 
 }
+//=============================================================================================================PEDIDOS
 
+function registrar_pedido($conexion, $carrito, $mail_cliente){
+    $registro = extraer_usuario($conexion, $mail_cliente);
+    $id_cliente = $registro['id'];
+    $consulta = mysqli_query($conexion, "INSERT INTO `pedidos` (`id`, `id_cliente`, `fecha`, `pagado`) VALUES (NULL, '$id_cliente', CURRENT_TIMESTAMP, '0');");
+    if($consulta == false){
+        return "<div class='alert alert-success'>Error al registrar el pedido</div>";
+    }
+    $id_pedido = mysqli_insert_id($conexion);
+    foreach($carrito as $indice => $valor){
+        $id_producto = $valor['id'];
+        $consulta = mysqli_query($conexion, "INSERT INTO `pedidos_productos` (`id`, `id_pedido`, `id_producto`) VALUES (NULL, '$id_pedido', '$id_producto');");
+        if($consulta == false){
+            return "<div class='alert alert-success'>Error al registrar el pedido</div>";
+        }
+    }
+    return "<div class='alert alert-success'>Pedido registrado satisfactoriamente</div>";
+
+}
 
 //=============================================================================================================BUSCAR
 function buscar($conexion, $tabla, $campo, $cadena){

@@ -47,11 +47,11 @@ else{
                 </div>
             </div>
             <div class="row">
-                <div class="col-8">
+                <div class="col-lg-12 col-xl-6">
                     <?php include 'plantillas/plantilla_nav_categorias.php' ?>
                 </div>
             
-                <div class="col-4">
+                <div class="col-lg-12 col-xl-6">
                    <?php include "plantillas/plantilla_buscador.php" ?>
                 </div>
             </div>
