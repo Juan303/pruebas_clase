@@ -37,6 +37,13 @@ function cuenta_articulos(){
     }
     return $n_items;
 }
+function total_carrito($carrito){
+    $total = 0;
+    foreach($carrito as $value => $valor){
+        $total += $valor['precio'];
+    }
+    return $total;
+}
 
 
 

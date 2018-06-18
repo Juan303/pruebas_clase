@@ -1,4 +1,5 @@
 <?php
+require_once "carrito.php";
 //====================================================================================================================================USUARIOS
 function list_usuarios($conexion)
 {
@@ -85,6 +86,7 @@ function modificar_usuario($conexion, $array, $email_user)
 
 function actualizar_pass($conexion, $pass_antigua, $pass_nueva, $pass_nueva_r, $email){
     if($pass_nueva == $pass_nueva_r){
+        $pass_nueva = crypt($pass_nueva, 'rl');
         $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE email = '$email'");
         $registro = mysqli_fetch_array($consulta);
         if($registro['pass'] == crypt($pass_antigua, 'rl')){
@@ -182,7 +184,8 @@ function registrar_producto($conexion, $array)
 function registrar_pedido($conexion, $carrito, $mail_cliente){
     $registro = extraer_usuario($conexion, $mail_cliente);
     $id_cliente = $registro['id'];
-    $consulta = mysqli_query($conexion, "INSERT INTO `pedidos` (`id`, `id_cliente`, `fecha`, `pagado`) VALUES (NULL, '$id_cliente', CURRENT_TIMESTAMP, '0');");
+    $total = total_carrito($carrito);
+    $consulta = mysqli_query($conexion, "INSERT INTO `pedidos` (`id`, `id_cliente`, `fecha`, `total`, `pagado`) VALUES (NULL, '$id_cliente', CURRENT_TIMESTAMP, '$total' ,'0');");
     if($consulta == false){
         return "<div class='alert alert-success'>Error al registrar el pedido</div>";
     }
@@ -196,6 +199,13 @@ function registrar_pedido($conexion, $carrito, $mail_cliente){
     }
     return "<div class='alert alert-success'>Pedido registrado satisfactoriamente</div>";
 
+}
+function pedidos_cliente($conexion, $email){
+    $registro = extraer_usuario($conexion, $email);
+    $id_usuario = $registro['id'];
+    $consulta = mysqli_query($conexion, "SELECT * FROM pedidos WHERE id_cliente = '$id_usuario'");
+
+    return $consulta;
 }
 
 //=============================================================================================================BUSCAR

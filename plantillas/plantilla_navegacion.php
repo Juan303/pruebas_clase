@@ -95,6 +95,7 @@ include_once "librerias/carrito.php"; ?>
                             </button>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="editar_cuenta.php">Mi cuenta</a>
+                                <a class="dropdown-item" href="mis_pedidos.php">Mis pedidos</a>
                                 <a class="dropdown-item" href="?salir=1">Salir</a>
                                 <?php if(is_admin($conexion, $_SESSION['email'])){ ?>
                                     <div class="dropdown-divider"></div>

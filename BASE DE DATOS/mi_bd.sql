@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-06-2018 a las 01:02:23
+-- Tiempo de generación: 18-06-2018 a las 23:20:19
 -- Versión del servidor: 10.1.30-MariaDB
 -- Versión de PHP: 7.0.27
 
@@ -74,8 +74,17 @@ CREATE TABLE `pedidos` (
   `id` int(10) NOT NULL,
   `id_cliente` int(20) NOT NULL,
   `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `pagado` tinyint(1) NOT NULL DEFAULT '0'
+  `total` decimal(10,2) NOT NULL,
+  `pagado` enum('si','no') COLLATE utf8_spanish_ci NOT NULL DEFAULT 'no'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `pedidos`
+--
+
+INSERT INTO `pedidos` (`id`, `id_cliente`, `fecha`, `total`, `pagado`) VALUES
+(12, 16, '2018-06-17 23:27:28', '0.00', 'no'),
+(13, 16, '2018-06-18 19:47:07', '1741.00', '');
 
 -- --------------------------------------------------------
 
@@ -88,6 +97,18 @@ CREATE TABLE `pedidos_productos` (
   `id_pedido` int(11) NOT NULL,
   `id_producto` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `pedidos_productos`
+--
+
+INSERT INTO `pedidos_productos` (`id`, `id_pedido`, `id_producto`) VALUES
+(10, 12, 4),
+(11, 12, 7),
+(12, 12, 8),
+(13, 13, 7),
+(14, 13, 4),
+(15, 13, 9);
 
 -- --------------------------------------------------------
 
@@ -148,7 +169,7 @@ INSERT INTO `usuarios` (`id`, `usuario`, `nombre`, `apellidos`, `email`, `pass`,
 (4, 'jaime', 'Jaime', 'Urrutia', 'jaime@jaime.com', '2365478', '2018-05-21 21:59:27', 'user', '0', 'desactivada'),
 (5, 'laia', 'Laia', 'Palau', 'laia@laia.com', '14587965', '2018-05-21 21:59:27', 'user', '0', 'desactivada'),
 (8, 'neo303', 'Juanes', 'Sanchez', 'informasterjuan@gmail.com', '1234', '2018-05-29 23:30:25', 'user', '0', 'desactivada'),
-(15, 'bob303', 'Juan Esteban', 'Sanchez de la Torre', 'gdf000@hotmail.com', '2501303', '2018-06-12 21:39:53', 'user', 'rl/ou.1NF6neo', 'activada');
+(16, 'bob303', 'Juan', 'Sanchez de la Torre', 'gdf000@hotmail.com', 'rlBorjaxvSGK.', '2018-06-17 23:26:16', 'admin', 'rlu3frpPCYJSI', 'activada');
 
 --
 -- Índices para tablas volcadas
@@ -214,13 +235,13 @@ ALTER TABLE `imagenes`
 -- AUTO_INCREMENT de la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `pedidos_productos`
 --
 ALTER TABLE `pedidos_productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
@@ -232,7 +253,7 @@ ALTER TABLE `productos`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Restricciones para tablas volcadas
