@@ -56,17 +56,18 @@
                         ?>
                         <h2><?=$titulo;?></h2>
                         <div class="row">
-                            <div class="col-8">
+                            <div class="col-lg-12 col-xl-6">
                                 <?php include 'plantillas/plantilla_nav_categorias.php' ?>
                             </div>
-                            <div class="col-4">
-                                <?php include "plantillas/plantilla_buscador.php"?>
+                        
+                            <div class="col-lg-12 col-xl-6">
+                            <?php include "plantillas/plantilla_buscador.php" ?>
                             </div>
                         </div>
                         
                         <?=$mensaje;?>
                         
-                        <table class="table table-bordered table-hover">
+                        <table class="table  table-sm table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th scope="col">Id</th>
@@ -90,59 +91,9 @@
                                         <td><?=$row['precio'];?></td>
                                         <td><?= $row['fecha'];?></td>
                                         <td><?= $row['visibilidad'];?></td>
-                                        <td><a class='btn btn-warning' href='editar_producto.php?producto_id=<?=$row['id'];?>'>Editar</a></td>
-                                        <td><a class='btn btn-danger' href='?eliminar_id=<?=$row['id'];?>'>Eliminar</a></td>
+                                        <td><a class='btn btn-sm btn-warning' href='editar_producto.php?producto_id=<?=$row['id'];?>'>Editar</a></td>
+                                        <td><a class='btn btn-sm btn-danger' href='?eliminar_id=<?=$row['id'];?>'>Eliminar</a></td>
                                     </tr>
-                                    <div id="myModal_<?=$row['id'];?>" class="modal fade" role="dialog">
-                                        <div class="modal-dialog">
-                                            <!-- Modal content-->
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">Editar producto #<?=$row['id'];?></h4>
-                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form action="" method="post">
-                                                        <div class="form-group m-0">
-                                                            <label for="nombre">Nombre</label>
-                                                            <input type="text" class="form-control" id="nombre" value="<?=$row['nombre'];?>"  name="nombre" placeholder="">
-                                                        </div>
-                                                        <div class="form-group  m-0">
-                                                            <label for="categoria">Categoria</label>
-                                                            <select class="custom-select" id="categoria" name="categoria">
-                                                            <?php 
-                                                                $categorias = list_categorias($conexion);
-                                                                while($row_cat = mysqli_fetch_array($categorias)){ ?>
-                                                                    <option value="<?=$row_cat['id'];?>"><?=$row_cat['nombre'];?></option>
-                                                                <?php } ?>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group m-0">
-                                                            <label for="descripcion_corta">Descripción corta</label>
-                                                            <textarea class="form-control" value="<?=$row['descripcion_corta'];?>" name="descripcion_corta" rows="2" id="descripcion_corta"><?=$row['descripcion_corta'];?></textarea>
-                                                        </div>
-                                                        <div class="form-group m-0">
-                                                            <label for="precio">Precio</label>
-                                                            <input type="text" value="<?=$row['precio'];?>" class="form-control" id="precio" placeholder="" name="precio">
-                                                        </div>
-                                                        <div class="form-group m-0">
-                                                            <label for="descripcion_corta">Descripción</label>
-                                                            <textarea class="form-control" value="<?=$row['descripcion'];?>" name="descripcion" rows="10" id="descripcion"><?=$row['descripcion'];?></textarea>
-                                                        </div>
-                                                        <div class="form-group m-0">
-                                                            Visibilidad:
-                                                            <label for="si">Si</label>
-                                                            <input type="radio" name="visibilidad" id="si" value="si" />
-                                                            <label for="no">No</label>
-                                                            <input type="radio" name="visibilidad" id="no" value="no" />
-                                                        </div>
-                                                        <button type="submit" class="btn btn-primary" name="editar">Editar</button>
-                                                        <button type="reset" class="btn btn-warning">Restablecer</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                              <?php } ?>
                             
                         </table>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-06-2018 a las 23:20:08
+-- Tiempo de generación: 20-06-2018 a las 01:56:07
 -- Versión del servidor: 10.1.30-MariaDB
 -- Versión de PHP: 7.0.27
 
@@ -83,10 +83,7 @@ CREATE TABLE `pedidos` (
 --
 
 INSERT INTO `pedidos` (`id`, `id_cliente`, `fecha`, `total`, `pagado`) VALUES
-(12, 16, '2018-06-17 23:27:28', '0.00', 'no'),
-(13, 16, '2018-06-18 19:47:07', '1741.00', 'si'),
-(14, 16, '2018-06-19 19:23:58', '1761.00', ''),
-(15, 16, '2018-06-19 19:54:55', '706.00', '');
+(17, 16, '2018-06-19 22:16:26', '1112.00', 'no');
 
 -- --------------------------------------------------------
 
@@ -107,19 +104,9 @@ CREATE TABLE `pedidos_productos` (
 --
 
 INSERT INTO `pedidos_productos` (`id`, `id_pedido`, `id_producto`, `cantidad`, `precio`) VALUES
-(10, 12, 4, 0, '0.00'),
-(11, 12, 7, 0, '0.00'),
-(12, 12, 8, 0, '0.00'),
-(13, 13, 7, 0, '0.00'),
-(14, 13, 4, 0, '0.00'),
-(15, 13, 9, 0, '0.00'),
-(16, 14, 4, 0, '0.00'),
-(17, 14, 9, 0, '0.00'),
-(18, 14, 8, 0, '0.00'),
-(19, 14, 7, 0, '0.00'),
-(20, 15, 7, 1, '0.00'),
-(21, 15, 4, 1, '0.00'),
-(22, 15, 8, 2, '0.00');
+(26, 17, 8, 1, '0.00'),
+(27, 17, 9, 1, '0.00'),
+(28, 17, 7, 1, '0.00');
 
 -- --------------------------------------------------------
 
@@ -146,7 +133,7 @@ CREATE TABLE `productos` (
 
 INSERT INTO `productos` (`id`, `id_categoria`, `id_imagenes`, `nombre`, `descripcion_corta`, `descripcion`, `precio`, `imagen`, `fecha`, `visibilidad`) VALUES
 (4, 2, 0, 'Bartop Arcade', 'bartop arcade mega guay que puedes jugar a toh', 'Supermega bartop donde poder jugar a millones de juegos hasta que te sangren los muñones.', '651.00', 'imagenes/productos/bartop_1.jpg', '2018-06-03 22:16:25', 'si'),
-(7, 3, 0, 'Conector USB pasamuros guay', 'Conector USB con rosca de 30 mm', 'Conector USB de buena calidad con la caracteristica de que se puede colocar sobre madera de distintos grosores', '15.00', 'imagenes/productos/mando_3.jpg', '2018-06-05 22:00:21', 'si'),
+(7, 3, 0, 'Conector USB pasamuros guay', 'Conector USB con rosca de 30 mm', 'Conector USB de buena calidad con la caracteristica de que se puede colocar sobre madera de distintos grosores', '17.00', 'imagenes/productos/mando_3.jpg', '2018-06-05 22:00:21', 'si'),
 (8, 3, 0, 'Conector JAMMA', 'Conector Jamma para recreativas', 'Conector estandar Jamma de 120 pines', '20.00', 'imagenes/productos/mando_3.jpg', '2018-06-05 22:01:24', 'si'),
 (9, 4, 0, 'Arcade Full God', 'Arcade completa', 'Arcade completa para ponerla en el salon y que tu mujer/marido te eche de casa al ver lo que te has gastado y lo fea que es.', '1075.00', 'imagenes/productos/mando_3.jpg', '2018-06-05 22:32:48', 'si');
 
@@ -246,13 +233,13 @@ ALTER TABLE `imagenes`
 -- AUTO_INCREMENT de la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `pedidos_productos`
 --
 ALTER TABLE `pedidos_productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
@@ -280,7 +267,7 @@ ALTER TABLE `pedidos`
 -- Filtros para la tabla `pedidos_productos`
 --
 ALTER TABLE `pedidos_productos`
-  ADD CONSTRAINT `pedidos` FOREIGN KEY (`id_pedido`) REFERENCES `pedidos` (`id`),
+  ADD CONSTRAINT `pedidos` FOREIGN KEY (`id_pedido`) REFERENCES `pedidos` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `productos` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id`);
 
 --

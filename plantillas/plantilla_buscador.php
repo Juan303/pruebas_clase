@@ -16,7 +16,7 @@
         <div class="input-group col-md-12">
             <input type="text" class="form-control form-control-sm" placeholder="Buscar" name="texto" />
             <span class="input-group-btn">
-                <button class="btn btn-info btn-sm" type="button" name="buscar">
+                <button class="btn btn-info btn-sm" type="submit" name="buscar">
                     <i class="material-icons md-18">search</i>
                 </button>
             </span>

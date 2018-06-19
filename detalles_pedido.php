@@ -31,15 +31,11 @@
                     <div class="col-12">
                       
                         <h2><?=$titulo;if($pagado){ echo " (Pagado)";}else{ echo " (Pendiente)";} ?></h2>
-                        <div class="row">
-                            <div class="col-4">
-                                <?php include "plantillas/plantilla_buscador_pedidos.php"?>
-                            </div>
-                        </div>
+                        
                         
                         <?=$mensaje;?>
                         
-                        <table class="table table-bordered table-hover">
+                        <table class="table table-sm table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th scope="col">Id</th>
@@ -49,18 +45,28 @@
                                 </tr>
                             </thead>
                             <?php
-                                while ($row = mysqli_fetch_array($consulta)) { ?>
+                                while ($row = mysqli_fetch_array($consulta)) {?>
+                                    
                                     <tr>
                                         <td><?=$row['id'];?></td>
                                         <td><?=$row['nombre'];?></td>
                                         <td><?=$row['cantidad'];?></td>
-                                        <td><?=$row['precio'];?></td>
+                                        <td>
+                                            <?php 
+                                                //Si está pagado muestro el precio que se registro en productos_pedidos al pagar
+                                                //si no, muestro el precio actual de la base de datos
+                                                if($pagado){
+                                                    echo $row['precio_producto_pedido'];
+                                                }
+                                                else{
+                                                    echo $row['precio_producto'];
+                                                }
+                                            ?>
+                                        </td>
                                     </tr>
                                    
                              <?php } ?>
-                            
                         </table>
-                        <a class="btn btn-success" href="registrar_producto.php">Registrar producto</a>
                     </div>
                 </div>
             </div>

@@ -44,7 +44,14 @@
                                 <tr>
                                     <td><?=$row['id'];?></td>
                                     <td><?=$row['fecha'];?></td>
-                                    <td><?=$row['total'];?>€</td>
+                                    <td><?php
+                                        if (!pedido_pagado($conexion, $row['id'])) {
+                                            print_r(total_pedido($conexion, $row['id']));
+                                        } else {
+                                            echo $row['total'];
+                                        }?>
+                                        €
+                                    </td>
                                     <td><?=$row['pagado'];?></td>
                                     <td><a class='btn btn-danger' href='detalles_pedido.php?id_pedido=<?=$row['id'];?>'>Detalles</a></td>
                                 </tr>

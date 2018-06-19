@@ -185,7 +185,7 @@ function registrar_pedido($conexion, $carrito, $mail_cliente){
     $registro = extraer_usuario($conexion, $mail_cliente);
     $id_cliente = $registro['id'];
     $total = total_carrito($carrito);
-    $consulta = mysqli_query($conexion, "INSERT INTO `pedidos` (`id`, `id_cliente`, `fecha`, `total`, `pagado`) VALUES (NULL, '$id_cliente', CURRENT_TIMESTAMP, '$total' ,'0');");
+    $consulta = mysqli_query($conexion, "INSERT INTO `pedidos` (`id`, `id_cliente`, `fecha`, `total`) VALUES (NULL, '$id_cliente', CURRENT_TIMESTAMP, '$total');");
     if($consulta == false){
         return "<div class='alert alert-success'>Error al registrar el pedido</div>";
     }
@@ -205,11 +205,15 @@ function pedidos_cliente($conexion, $email){
     $registro = extraer_usuario($conexion, $email);
     $id_usuario = $registro['id'];
     $consulta = mysqli_query($conexion, "SELECT * FROM pedidos WHERE id_cliente = '$id_usuario'");
-
     return $consulta;
 }
+function total_pedido($conexion, $id_pedido){
+    $consulta = mysqli_query($conexion, "SELECT SUM(P.precio) FROM productos P, pedidos_productos PP WHERE PP.id_pedido = '$id_pedido' AND P.id = PP.id_producto");
+    $total = mysqli_fetch_array($consulta);
+    return $total[0];
+}
 function productos_pedido($conexion, $id_pedido){
-    $consulta = mysqli_query($conexion, "SELECT PP.precio, PP.cantidad, P.id, P.nombre FROM pedidos_productos PP, productos P WHERE PP.id_pedido = '$id_pedido' AND P.id = PP.id_producto");
+    $consulta = mysqli_query($conexion, "SELECT PP.precio AS precio_producto_pedido, PP.cantidad, P.id, P.nombre, P.precio AS precio_producto FROM pedidos_productos PP, productos P WHERE PP.id_pedido = '$id_pedido' AND P.id = PP.id_producto");
     return $consulta;
 }
 function pedido_pagado($conexion, $id_pedido){
@@ -219,6 +223,13 @@ function pedido_pagado($conexion, $id_pedido){
         return true;
     }
     return false;
+}
+function cambiar_estado_pedido($conexion, $id_pedido, $estado){
+    $total_pedido = total_pedido($conexion, $id_pedido);
+    $consulta = mysqli_query($conexion, "UPDATE pedidos SET pagado = '$estado', total = '$total_pedido'  WHERE id = '$id_pedido'");
+    if($consulta){
+        return "Estado del pedido cambiado";
+    }
 }
 
 //=============================================================================================================BUSCAR

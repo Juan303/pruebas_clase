@@ -38,7 +38,7 @@ include "librerias/consultas_bd.php";
                                 <p>
                                     <?=$mensaje_eliminar;?>
                                 </p>
-                                <table class="table table-bordered table-hover">
+                                <table class="table  table-sm table-bordered table-hover">
                                     <thead>
                                         <tr>
                                             <th scope="col">Id</th>
@@ -48,16 +48,17 @@ include "librerias/consultas_bd.php";
                                              <th scope="col">Eliminar</th>
                                         </tr>
                                     </thead>
-                                    <?php
-                            $res = list_usuarios($conexion);
-                            while($row = mysqli_fetch_array($res)){
-                                echo "<tr><td>".$row['id']."</td>
-                                            <td>".$row['usuario']."</td>
-                                            <td>".$row['email']."</td>
-                                            
-                                            <td><a href='?eliminar_id=".$row['id']."'>Eliminar</a></td></tr>";
-                            } 
-                        ?>
+                                <?php
+                                $res = list_usuarios($conexion);
+                                while($row = mysqli_fetch_array($res)){ ?>
+                                    <tr>
+                                        <td><?=$row['id'];?></td>
+                                        <td><?=$row['usuario'];?></td>
+                                        <td><?=$row['email'];?></td>
+                                        <td><a class="btn btn-sm btn-info" href='editar_usuario_admin?id_usuario=<?=$row['id'];?>'>Editar</a></td>
+                                        <td><a class="btn btn-sm btn-danger"href='?eliminar_id=<?=$row['id'];?>'>Eliminar</a></td>
+                                    </tr>
+                            <?php } ?>
                                 </table>
                         </div>
 
