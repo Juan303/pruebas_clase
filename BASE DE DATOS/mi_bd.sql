@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-06-2018 a las 23:20:19
+-- Tiempo de generación: 19-06-2018 a las 23:20:08
 -- Versión del servidor: 10.1.30-MariaDB
 -- Versión de PHP: 7.0.27
 
@@ -84,7 +84,9 @@ CREATE TABLE `pedidos` (
 
 INSERT INTO `pedidos` (`id`, `id_cliente`, `fecha`, `total`, `pagado`) VALUES
 (12, 16, '2018-06-17 23:27:28', '0.00', 'no'),
-(13, 16, '2018-06-18 19:47:07', '1741.00', '');
+(13, 16, '2018-06-18 19:47:07', '1741.00', 'si'),
+(14, 16, '2018-06-19 19:23:58', '1761.00', ''),
+(15, 16, '2018-06-19 19:54:55', '706.00', '');
 
 -- --------------------------------------------------------
 
@@ -95,20 +97,29 @@ INSERT INTO `pedidos` (`id`, `id_cliente`, `fecha`, `total`, `pagado`) VALUES
 CREATE TABLE `pedidos_productos` (
   `id` int(11) NOT NULL,
   `id_pedido` int(11) NOT NULL,
-  `id_producto` int(11) NOT NULL
+  `id_producto` int(11) NOT NULL,
+  `cantidad` int(10) NOT NULL,
+  `precio` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `pedidos_productos`
 --
 
-INSERT INTO `pedidos_productos` (`id`, `id_pedido`, `id_producto`) VALUES
-(10, 12, 4),
-(11, 12, 7),
-(12, 12, 8),
-(13, 13, 7),
-(14, 13, 4),
-(15, 13, 9);
+INSERT INTO `pedidos_productos` (`id`, `id_pedido`, `id_producto`, `cantidad`, `precio`) VALUES
+(10, 12, 4, 0, '0.00'),
+(11, 12, 7, 0, '0.00'),
+(12, 12, 8, 0, '0.00'),
+(13, 13, 7, 0, '0.00'),
+(14, 13, 4, 0, '0.00'),
+(15, 13, 9, 0, '0.00'),
+(16, 14, 4, 0, '0.00'),
+(17, 14, 9, 0, '0.00'),
+(18, 14, 8, 0, '0.00'),
+(19, 14, 7, 0, '0.00'),
+(20, 15, 7, 1, '0.00'),
+(21, 15, 4, 1, '0.00'),
+(22, 15, 8, 2, '0.00');
 
 -- --------------------------------------------------------
 
@@ -235,13 +246,13 @@ ALTER TABLE `imagenes`
 -- AUTO_INCREMENT de la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `pedidos_productos`
 --
 ALTER TABLE `pedidos_productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`

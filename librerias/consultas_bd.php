@@ -192,7 +192,8 @@ function registrar_pedido($conexion, $carrito, $mail_cliente){
     $id_pedido = mysqli_insert_id($conexion);
     foreach($carrito as $indice => $valor){
         $id_producto = $valor['id'];
-        $consulta = mysqli_query($conexion, "INSERT INTO `pedidos_productos` (`id`, `id_pedido`, `id_producto`) VALUES (NULL, '$id_pedido', '$id_producto');");
+        $cantidad = $valor['cantidad'];
+        $consulta = mysqli_query($conexion, "INSERT INTO `pedidos_productos` (`id`, `id_pedido`, `id_producto`, `cantidad`) VALUES (NULL, '$id_pedido', '$id_producto', '$cantidad');");
         if($consulta == false){
             return "<div class='alert alert-success'>Error al registrar el pedido</div>";
         }
@@ -206,6 +207,18 @@ function pedidos_cliente($conexion, $email){
     $consulta = mysqli_query($conexion, "SELECT * FROM pedidos WHERE id_cliente = '$id_usuario'");
 
     return $consulta;
+}
+function productos_pedido($conexion, $id_pedido){
+    $consulta = mysqli_query($conexion, "SELECT PP.precio, PP.cantidad, P.id, P.nombre FROM pedidos_productos PP, productos P WHERE PP.id_pedido = '$id_pedido' AND P.id = PP.id_producto");
+    return $consulta;
+}
+function pedido_pagado($conexion, $id_pedido){
+    $consulta = mysqli_query($conexion, "SELECT pagado FROM pedidos WHERE id='$id_pedido'");
+    $registro = mysqli_fetch_array($consulta);
+    if($registro['pagado'] == 'si'){
+        return true;
+    }
+    return false;
 }
 
 //=============================================================================================================BUSCAR

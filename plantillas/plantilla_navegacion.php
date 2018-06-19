@@ -102,6 +102,7 @@ include_once "librerias/carrito.php"; ?>
                                     <a class="dropdown-item" href="admin_usuarios.php">Editar usuarios</a>
                                     <a class="dropdown-item" href="admin_productos.php">Editar productos</a>
                                     <a class="dropdown-item" href="admin_categorias.php">Editar categorias</a>
+                                    <a class="dropdown-item" href="admin_pedidos.php">Editar pedidos</a>
                                 <?php } ?>
                             </div>
                         </div>

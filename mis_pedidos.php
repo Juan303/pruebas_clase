@@ -46,7 +46,7 @@
                                     <td><?=$row['fecha'];?></td>
                                     <td><?=$row['total'];?>€</td>
                                     <td><?=$row['pagado'];?></td>
-                                    <td><a class='btn btn-danger' href='detalles_pedido?id=hola'>Detalles</a></td>
+                                    <td><a class='btn btn-danger' href='detalles_pedido.php?id_pedido=<?=$row['id'];?>'>Detalles</a></td>
                                 </tr>
                                 <?php } ?>
                             
