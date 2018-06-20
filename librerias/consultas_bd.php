@@ -224,9 +224,20 @@ function pedido_pagado($conexion, $id_pedido){
     }
     return false;
 }
+function precio_producto($conexion, $id_producto){
+    $consulta = mysqli_query($conexion, "SELECT precio FROM productos WHERE id = '$id_producto'");
+    $producto = mysqli_fetch_array($consulta);
+    return $producto['precio'];
+}
 function cambiar_estado_pedido($conexion, $id_pedido, $estado){
     $total_pedido = total_pedido($conexion, $id_pedido);
     $consulta = mysqli_query($conexion, "UPDATE pedidos SET pagado = '$estado', total = '$total_pedido'  WHERE id = '$id_pedido'");
+    $productos = productos_pedido($conexion, $id_pedido);
+    while($producto = mysqli_fetch_array($productos)){
+        $id_producto = $producto['id'];
+        $precio_producto = precio_producto($conexion, $id_producto);
+        $consulta = mysqli_query($conexion, "UPDATE pedidos_productos SET precio = '$precio_producto' WHERE id_producto = '$id_producto'");
+    }
     if($consulta){
         return "Estado del pedido cambiado";
     }
