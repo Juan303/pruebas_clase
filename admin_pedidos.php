@@ -71,7 +71,7 @@
                                         <td><?=$row['fecha'];?></td>
                                         <td>
                                         <?php 
-                                            if(!pedido_pagado($conexion, $row['id'])){
+                                            if($row['pagado'] == 'no'){
                                                 print_r(total_pedido($conexion, $row['id']));
                                             }
                                             else{

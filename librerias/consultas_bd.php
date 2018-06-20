@@ -213,7 +213,7 @@ function total_pedido($conexion, $id_pedido){
     return $total[0];
 }
 function productos_pedido($conexion, $id_pedido){
-    $consulta = mysqli_query($conexion, "SELECT PP.precio AS precio_producto_pedido, PP.cantidad, P.id, P.nombre, P.precio AS precio_producto FROM pedidos_productos PP, productos P WHERE PP.id_pedido = '$id_pedido' AND P.id = PP.id_producto");
+    $consulta = mysqli_query($conexion, "SELECT PP.precio AS precio_producto_pedido, PP.cantidad, PP.id AS id_pedido_producto, P.id, P.nombre, P.precio AS precio_producto FROM pedidos_productos PP, productos P WHERE PP.id_pedido = '$id_pedido' AND P.id = PP.id_producto");
     return $consulta;
 }
 function pedido_pagado($conexion, $id_pedido){
@@ -234,9 +234,9 @@ function cambiar_estado_pedido($conexion, $id_pedido, $estado){
     $consulta = mysqli_query($conexion, "UPDATE pedidos SET pagado = '$estado', total = '$total_pedido'  WHERE id = '$id_pedido'");
     $productos = productos_pedido($conexion, $id_pedido);
     while($producto = mysqli_fetch_array($productos)){
-        $id_producto = $producto['id'];
-        $precio_producto = precio_producto($conexion, $id_producto);
-        $consulta = mysqli_query($conexion, "UPDATE pedidos_productos SET precio = '$precio_producto' WHERE id_producto = '$id_producto'");
+        $id_pedido_producto = $producto['id_pedido_producto'];
+        $precio_producto = $producto['precio_producto'];
+        $consulta = mysqli_query($conexion, "UPDATE pedidos_productos SET precio = '$precio_producto' WHERE id = '$id_pedido_producto' ");
     }
     if($consulta){
         return "Estado del pedido cambiado";
