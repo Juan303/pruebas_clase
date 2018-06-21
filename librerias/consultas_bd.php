@@ -181,11 +181,11 @@ function registrar_producto($conexion, $array)
 }
 //=============================================================================================================PEDIDOS
 
-function registrar_pedido($conexion, $carrito, $mail_cliente){
+function registrar_pedido($conexion, $carrito, $mail_cliente, $id_transporte){
     $registro = extraer_usuario($conexion, $mail_cliente);
     $id_cliente = $registro['id'];
     $total = total_carrito($carrito);
-    $consulta = mysqli_query($conexion, "INSERT INTO `pedidos` (`id`, `id_cliente`, `fecha`, `total`) VALUES (NULL, '$id_cliente', CURRENT_TIMESTAMP, '$total');");
+    $consulta = mysqli_query($conexion, "INSERT INTO `pedidos` (`id`, `id_cliente`, `id_transporte`, `fecha`, `total`) VALUES (NULL, '$id_cliente',$id_transporte, CURRENT_TIMESTAMP, '$total');");
     if($consulta == false){
         return "<div class='alert alert-success'>Error al registrar el pedido</div>";
     }
@@ -208,7 +208,7 @@ function pedidos_cliente($conexion, $email){
     return $consulta;
 }
 function total_pedido($conexion, $id_pedido){
-    $consulta = mysqli_query($conexion, "SELECT SUM(P.precio) FROM productos P, pedidos_productos PP WHERE PP.id_pedido = '$id_pedido' AND P.id = PP.id_producto");
+    $consulta = mysqli_query($conexion, "SELECT SUM(P.precio*PP.cantidad) FROM productos P, pedidos_productos PP WHERE PP.id_pedido = '$id_pedido' AND P.id = PP.id_producto");
     $total = mysqli_fetch_array($consulta);
     return $total[0];
 }
@@ -229,20 +229,27 @@ function precio_producto($conexion, $id_producto){
     $producto = mysqli_fetch_array($consulta);
     return $producto['precio'];
 }
-function cambiar_estado_pedido($conexion, $id_pedido, $estado){
+function cambiar_estado_pedido($conexion, $id_pedido, $estado, $id_transporte){
     $total_pedido = total_pedido($conexion, $id_pedido);
-    $consulta = mysqli_query($conexion, "UPDATE pedidos SET pagado = '$estado', total = '$total_pedido'  WHERE id = '$id_pedido'");
+    $precio_transporte = precio_transporte($conexion, $id_transporte);
+    $consulta = mysqli_query($conexion, "UPDATE pedidos SET pagado = '$estado', total = '$total_pedido', gastos_envio = '$precio_transporte'  WHERE id = '$id_pedido'");
     $productos = productos_pedido($conexion, $id_pedido);
     while($producto = mysqli_fetch_array($productos)){
         $id_pedido_producto = $producto['id_pedido_producto'];
-        $precio_producto = $producto['precio_producto'];
-        $consulta = mysqli_query($conexion, "UPDATE pedidos_productos SET precio = '$precio_producto' WHERE id = '$id_pedido_producto' ");
+        $precio_productos = $producto['precio_producto']*$producto['cantidad'];
+        $consulta = mysqli_query($conexion, "UPDATE pedidos_productos SET precio = '$precio_productos' WHERE id = '$id_pedido_producto' ");
     }
     if($consulta){
         return "Estado del pedido cambiado";
     }
 }
+//============================================================================================================TRANSPORTE
 
+function precio_transporte($conexion, $id_transporte){
+    $consulta = mysqli_query($conexion, "SELECT tarifa FROM transporte WHERE id = '$id_transporte'");
+    $registro = mysqli_fetch_array($consulta);
+    return $registro['tarifa'];
+}
 //=============================================================================================================BUSCAR
 function buscar($conexion, $tabla, $campo, $cadena){
     $consulta = mysqli_query($conexion, "SELECT * FROM $tabla WHERE $campo LIKE '%$cadena%'");

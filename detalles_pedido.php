@@ -40,16 +40,27 @@
                                 <tr>
                                     <th scope="col">Id</th>
                                     <th scope="col">Nombre</th>
+                                    <th scope="col">Precio/u</th>
                                     <th scope="col">Cantidad</th>
                                     <th scope="col">Total</th>
                                 </tr>
                             </thead>
                             <?php
+                                $sub_total = 0;
                                 while ($row = mysqli_fetch_array($consulta)) {?>
                                     
                                     <tr>
                                         <td><?=$row['id'];?></td>
                                         <td><?=$row['nombre'];?></td>
+                                        <td>
+                                            <?php
+                                                if ($pagado) {
+                                                    echo $row['precio_producto_pedido']/$row['cantidad'];
+                                                } else {
+                                                    echo $row['precio_producto'];
+                                                }
+                                            ?>€
+                                        </td>
                                         <td><?=$row['cantidad'];?></td>
                                         <td>
                                             <?php 
@@ -57,15 +68,45 @@
                                                 //si no, muestro el precio actual de la base de datos
                                                 if($pagado){
                                                     echo $row['precio_producto_pedido'];
+                                                    $sub_total += $row['precio_producto_pedido'];
                                                 }
                                                 else{
-                                                    echo $row['precio_producto'];
+                                                    echo $row['precio_producto']*$row['cantidad'];
+                                                    $sub_total += $row['precio_producto']*$row['cantidad'];
+
                                                 }
-                                            ?>
+                                            ?>€
                                         </td>
                                     </tr>
                                    
                              <?php } ?>
+                             <tfoot>
+                                <tr>
+                                    <td colspan="3">
+                                    </td>
+                                    <td>Subtotal</td>
+                                    <td><?=$sub_total;?>€</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                    </td>
+                                    <td>Gastos de envio</td>
+                                    <td>10€</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                    </td>
+                                    <td>IVA</td>
+                                    <td><?=($sub_total+10)*0.21;?>€</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                    </td>
+                                    <td>TOTAL</td>
+                                    <td><?=(($sub_total+10)*1.21);?>€</td>
+                                </tr>
+                             </tfoot>
+                            
                         </table>
                     </div>
                 </div>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-06-2018 a las 01:56:07
+-- Tiempo de generación: 21-06-2018 a las 03:03:29
 -- Versión del servidor: 10.1.30-MariaDB
 -- Versión de PHP: 7.0.27
 
@@ -73,7 +73,9 @@ INSERT INTO `imagenes` (`id`, `link`, `alt`) VALUES
 CREATE TABLE `pedidos` (
   `id` int(10) NOT NULL,
   `id_cliente` int(20) NOT NULL,
+  `id_transporte` int(10) NOT NULL,
   `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `gastos_envio` decimal(10,2) NOT NULL,
   `total` decimal(10,2) NOT NULL,
   `pagado` enum('si','no') COLLATE utf8_spanish_ci NOT NULL DEFAULT 'no'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
@@ -82,8 +84,9 @@ CREATE TABLE `pedidos` (
 -- Volcado de datos para la tabla `pedidos`
 --
 
-INSERT INTO `pedidos` (`id`, `id_cliente`, `fecha`, `total`, `pagado`) VALUES
-(17, 16, '2018-06-19 22:16:26', '1112.00', 'no');
+INSERT INTO `pedidos` (`id`, `id_cliente`, `id_transporte`, `fecha`, `gastos_envio`, `total`, `pagado`) VALUES
+(21, 16, 1, '2018-06-20 23:29:20', '10.00', '40.00', 'si'),
+(22, 16, 3, '2018-06-21 00:55:26', '0.00', '68.00', 'no');
 
 -- --------------------------------------------------------
 
@@ -104,9 +107,8 @@ CREATE TABLE `pedidos_productos` (
 --
 
 INSERT INTO `pedidos_productos` (`id`, `id_pedido`, `id_producto`, `cantidad`, `precio`) VALUES
-(26, 17, 8, 1, '0.00'),
-(27, 17, 9, 1, '0.00'),
-(28, 17, 7, 1, '0.00');
+(32, 21, 7, 4, '40.00'),
+(33, 22, 7, 4, '0.00');
 
 -- --------------------------------------------------------
 
@@ -133,9 +135,31 @@ CREATE TABLE `productos` (
 
 INSERT INTO `productos` (`id`, `id_categoria`, `id_imagenes`, `nombre`, `descripcion_corta`, `descripcion`, `precio`, `imagen`, `fecha`, `visibilidad`) VALUES
 (4, 2, 0, 'Bartop Arcade', 'bartop arcade mega guay que puedes jugar a toh', 'Supermega bartop donde poder jugar a millones de juegos hasta que te sangren los muñones.', '651.00', 'imagenes/productos/bartop_1.jpg', '2018-06-03 22:16:25', 'si'),
-(7, 3, 0, 'Conector USB pasamuros guay', 'Conector USB con rosca de 30 mm', 'Conector USB de buena calidad con la caracteristica de que se puede colocar sobre madera de distintos grosores', '17.00', 'imagenes/productos/mando_3.jpg', '2018-06-05 22:00:21', 'si'),
+(7, 3, 0, 'Conector USB pasamuros guay', 'Conector USB con rosca de 30 mm', 'Conector USB de buena calidad con la caracteristica de que se puede colocar sobre madera de distintos grosores', '10.00', 'imagenes/productos/mando_3.jpg', '2018-06-05 22:00:21', 'si'),
 (8, 3, 0, 'Conector JAMMA', 'Conector Jamma para recreativas', 'Conector estandar Jamma de 120 pines', '20.00', 'imagenes/productos/mando_3.jpg', '2018-06-05 22:01:24', 'si'),
 (9, 4, 0, 'Arcade Full God', 'Arcade completa', 'Arcade completa para ponerla en el salon y que tu mujer/marido te eche de casa al ver lo que te has gastado y lo fea que es.', '1075.00', 'imagenes/productos/mando_3.jpg', '2018-06-05 22:32:48', 'si');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `transporte`
+--
+
+CREATE TABLE `transporte` (
+  `id` int(10) NOT NULL,
+  `nombre` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
+  `tarifa` decimal(10,2) NOT NULL,
+  `descripcion` text COLLATE utf8_spanish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `transporte`
+--
+
+INSERT INTO `transporte` (`id`, `nombre`, `tarifa`, `descripcion`) VALUES
+(1, 'seur', '10.00', 'Compañia de kk'),
+(2, 'MRW', '11.00', 'Un poco mejor que seur'),
+(3, 'Correos', '6.00', 'La mas economica');
 
 -- --------------------------------------------------------
 
@@ -190,7 +214,8 @@ ALTER TABLE `imagenes`
 --
 ALTER TABLE `pedidos`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_cliente` (`id_cliente`);
+  ADD KEY `id_cliente` (`id_cliente`),
+  ADD KEY `id_transporte` (`id_transporte`);
 
 --
 -- Indices de la tabla `pedidos_productos`
@@ -206,6 +231,12 @@ ALTER TABLE `pedidos_productos`
 ALTER TABLE `productos`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_categoria` (`id_categoria`);
+
+--
+-- Indices de la tabla `transporte`
+--
+ALTER TABLE `transporte`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `usuarios`
@@ -233,19 +264,25 @@ ALTER TABLE `imagenes`
 -- AUTO_INCREMENT de la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `pedidos_productos`
 --
 ALTER TABLE `pedidos_productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT de la tabla `transporte`
+--
+ALTER TABLE `transporte`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
@@ -261,7 +298,8 @@ ALTER TABLE `usuarios`
 -- Filtros para la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
-  ADD CONSTRAINT `pedidos_ibfk_1` FOREIGN KEY (`id_cliente`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `pedidos_ibfk_1` FOREIGN KEY (`id_cliente`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `pedidos_ibfk_2` FOREIGN KEY (`id_transporte`) REFERENCES `transporte` (`id`);
 
 --
 -- Filtros para la tabla `pedidos_productos`

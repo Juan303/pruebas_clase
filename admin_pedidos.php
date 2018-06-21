@@ -10,7 +10,7 @@
             echo mysqli_error($conexion);
         }
         if(isset($_POST['guardar'])){
-            $mensaje = cambiar_estado_pedido($conexion, $_POST['id_pedido'], $_POST['pagado']);
+            $mensaje = cambiar_estado_pedido($conexion, $_POST['id_pedido'], $_POST['pagado'], $_POST['id_transporte']);
         }
         if (isset($_POST['buscar'])) {
            echo "Hola";
@@ -98,6 +98,7 @@
                                         <td>
                                             <button type="submit" name="guardar" class='btn btn-sm btn-success'>Guardar</button>
                                             <input type="hidden" name="id_pedido" value="<?=$row['id'];?>">
+                                            <input type="hidden" name="id_transporte" value="<?=$row['id_transporte'];?>">
                                         </td>
                                         <td><a class='btn btn-sm btn-danger' href='?eliminar_id=<?=$row['id'];?>'>Eliminar</a></td>
                                     </tr>

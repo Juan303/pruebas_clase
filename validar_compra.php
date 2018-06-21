@@ -6,7 +6,7 @@ include "librerias/PHPMailer/config.php";
 $mensaje = "";
 if(isset($_GET['validar_compra'])){
     if(isset($_SESSION['email'])){
-        $mensaje = registrar_pedido($conexion, $_SESSION['carrito'], $_SESSION['email']);
+        $mensaje = registrar_pedido($conexion, $_SESSION['carrito'], $_SESSION['email'], $_GET['id_transporte']);
     }
     else{
         header('Location: registro.php');
