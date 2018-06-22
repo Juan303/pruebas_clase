@@ -4,6 +4,18 @@
     include_once "consultas_bd.php";
     include_once "PHPMailer/config.php";
 
+    function mensaje_contacto(){}
+
+    function mensaje_confirmacion_cuenta($mail, $datos, $codigo){
+        $mail->AddAddress($datos['email_r']); // Esta es la dirección a donde enviamos
+        $mail->Subject = "Cuenta creada"; // Este es el titulo del email.
+        $mail->Body = "Haz click en el siguiente link para activar tu cuenta <a href='localhost:8000/php/Proyecto_1_BD/activar_cuenta.php?codigo=".$codigo ."&email=".$datos['email_r']."'>LINK ACTIVACION</a>";
+        if ($mail->Send()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     function mensaje_recuperar_pass($conexion, $mail, $mail_usuario){
         $registro = extraer_usuario($conexion, $mail_usuario);
         if($registro == NULL){

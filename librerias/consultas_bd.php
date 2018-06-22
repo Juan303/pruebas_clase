@@ -1,5 +1,6 @@
 <?php
 require_once "carrito.php";
+require_once "mails.php";
 //====================================================================================================================================USUARIOS
 function list_usuarios($conexion)
 {
@@ -29,8 +30,9 @@ function login($conexion, $email, $pass)
     }
     return false;
 }
-function insertar_usuario($conexion, $array, $codigo)
+function insertar_usuario($mail, $conexion, $array)
 {
+    $codigo = rand(0, 99999);
     //extraigo el mail para comprobar si esta en la base de datos
     $email = $_POST['email_r'];
     $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE email = '$email'");
@@ -42,12 +44,17 @@ function insertar_usuario($conexion, $array, $codigo)
         $pass = crypt($array['pass_r'], 'rl');
         $consulta = mysqli_query($conexion, "INSERT INTO `usuarios` (`id`, `email`, `pass`, `usuario`, `nombre`, `apellidos`, `codigo_activacion`, `estado`) VALUES (NULL, '$email', '$pass', '$usuario', '$nombre', '$apellidos', '$codigo', 'desactivada');");
         if ($consulta) {
-            return "Registro satisfactorio";
+            if(mensaje_confirmacion_cuenta($mail,$array,$codigo)){
+                return "<div class='alert alert-success' role='alert'>Registro satisfactorio. SE le ha enviado un mail de confirmacion de cuenta</div>";
+            }
+            else{
+                return "<div class='alert alert-warning' role='alert'>Hubo problemas con el mail de confirmacion. Contacte con nosotros para resolver la incidencia.</div>";
+            }
         } else {
-            return "Fallo en la BD. prueba mas tarde";
+            return "<div class='alert alert-danger' role='alert'>Fallo en la BD. prueba mas tarde</div>";
         }
     } else {
-        return "Ya existe un usuario con ese correo electronico!";
+        return "<div class='alert alert-danger' role='alert'>Ya existe un usuario con ese correo electronico!</div>";
     }
 }
 function modificar_usuario($conexion, $array, $email_user)
@@ -90,15 +97,15 @@ function renovar_pass($conexion, $pass, $pass_r, $email){
             $pass = crypt($pass, 'rl');
             $consulta = mysqli_query($conexion, "UPDATE usuarios SET pass = '$pass' WHERE email = '$email'");
             if($consulta){
-                return "Contraseña actualizada";
+                return "<div class='alert alert-success' role='alert'>Contraseña actualizada</div>";
             }
             else{
-                return "problemas al renovar la contraseña prueba de nuevo mas tarde";
+                return "<div class='alert alert-warning' role='alert'>Hubo problemas al renovar la contraseña prueba de nuevo mas tarde</div>";
             }
         }
     }
     else{
-        return "las contraseñas no coinciden";
+        return "<div class='alert alert-danger' role='alert'>Las contraseñas no coinciden</div>";
     }
 }
 
@@ -176,12 +183,12 @@ function editar_producto($conexion, $array, $id){
         $consulta = mysqli_query($conexion, "UPDATE `productos` SET `visibilidad` = '$visibilidad', `id_categoria` = '$id_categoria', `nombre` = '$nombre',`descripcion_corta` = '$descripcion_corta',`descripcion` = '$descripcion',`precio` = '$precio' WHERE `productos`.`id` = '$id'");
         echo mysqli_error($conexion);
         if ($consulta) {
-            return "Modificacion correcta";
+            return "<div class='alert alert-success' role='alert'>Modificacion correcta</div>";
         } else {
-            return "Fallo en la BD. prueba mas tarde";
+            return "<div class='alert alert-danger' role='alert'>Fallo en la BD. prueba mas tarde</div>";
         }
     } else {
-        return "Ya existe el producto [".$nombre."] en la categoria ".(nombre_categoria($conexion, $id_categoria))."!";
+        return "<div class='alert alert-danger' role='alert'>Ya existe el producto [".$nombre."] en la categoria ".(nombre_categoria($conexion, $id_categoria))."!</div>";
     }
 
 }
@@ -198,12 +205,12 @@ function registrar_producto($conexion, $array)
         $consulta = mysqli_query($conexion, "INSERT INTO `productos` (`id`, `id_categoria`, `id_imagenes`, `nombre`, `descripcion_corta`, `descripcion`, `precio`, `imagen`) VALUES (NULL, '$id_categoria', 0, '$nombre', '$descripcion_corta', '$descripcion', '$precio', 'imagenes/productos/mando_3.jpg');");
         echo mysqli_error($conexion);
         if ($consulta) {
-            return "Registro satisfactorio";
+            return "<div class='alert alert-success' role='alert'>Registro satisfactorio</div>";
         } else {
-            return "Fallo en la BD. prueba mas tarde";
+            return "<div class='alert alert-danger' role='alert'>Fallo en la BD. prueba mas tarde</div>";
         }
     } else {
-        return "Ya existe el producto [" . $nombre . "] en la categoria " . (nombre_categoria($conexion, $id_categoria)) . "!";
+        return "<div class='alert alert-danger' role='alert'>Ya existe el producto [" . $nombre . "] en la categoria " . (nombre_categoria($conexion, $id_categoria)) . "!</div>";
     }
 
 }
@@ -215,7 +222,7 @@ function registrar_pedido($conexion, $carrito, $mail_cliente, $id_transporte){
     $total = total_carrito($carrito);
     $consulta = mysqli_query($conexion, "INSERT INTO `pedidos` (`id`, `id_cliente`, `id_transporte`, `fecha`, `total`) VALUES (NULL, '$id_cliente',$id_transporte, CURRENT_TIMESTAMP, '$total');");
     if($consulta == false){
-        return "<div class='alert alert-success'>Error al registrar el pedido</div>";
+        return "<div class='alert alert-danger'>Error al registrar el pedido</div>";
     }
     $id_pedido = mysqli_insert_id($conexion);
     foreach($carrito as $indice => $valor){
@@ -223,10 +230,10 @@ function registrar_pedido($conexion, $carrito, $mail_cliente, $id_transporte){
         $cantidad = $valor['cantidad'];
         $consulta = mysqli_query($conexion, "INSERT INTO `pedidos_productos` (`id`, `id_pedido`, `id_producto`, `cantidad`) VALUES (NULL, '$id_pedido', '$id_producto', '$cantidad');");
         if($consulta == false){
-            return "<div class='alert alert-success'>Error al registrar el pedido</div>";
+            return "<div class='alert alert-danger' role='alert'>Error al registrar el pedido</div>";
         }
     }
-    return "<div class='alert alert-success'>Pedido registrado satisfactoriamente</div>";
+    return "<div class='alert alert-success' role='alert'>Pedido registrado satisfactoriamente</div>";
 
 }
 function pedidos_cliente($conexion, $email){
@@ -268,7 +275,7 @@ function cambiar_estado_pedido($conexion, $id_pedido, $estado, $id_transporte){
         $consulta = mysqli_query($conexion, "UPDATE pedidos_productos SET precio = '$precio_productos' WHERE id = '$id_pedido_producto' ");
     }
     if($consulta){
-        return "Estado del pedido cambiado";
+        return "<div class='alert alert-success' role='alert'>Estado del pedido ".$id_pedido." cambiado</div>";
     }
 }
 //============================================================================================================TRANSPORTE

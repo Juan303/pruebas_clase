@@ -1,8 +1,8 @@
 <?php
 session_start();
-include "database/conexion_bd.php";
-include "librerias/consultas_bd.php";
-include "librerias/PHPMailer/config.php";
+include_once "database/conexion_bd.php";
+include_once "librerias/consultas_bd.php";
+include_once "librerias/PHPMailer/config.php";
 $mensaje = "";
 if(isset($_GET['validar_compra'])){
     if(isset($_SESSION['email'])){
