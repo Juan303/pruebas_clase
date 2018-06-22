@@ -62,7 +62,7 @@ include_once "librerias/carrito.php"; ?>
                 </li>
             </ul>
         </div>   
-    
+        
         <?php
         $error = "";
         if(isset($_POST['email_login'])){
@@ -83,7 +83,8 @@ include_once "librerias/carrito.php"; ?>
                 <input class="form-control form-control-sm mr-sm-2" type="password" placeholder="Contraseña" name="pass" aria-label="pass">
                 <button class="btn btn-sm btn-success my-2 my-sm-0" type="submit">Entrar</button>
             </form>
-            <a class="btn btn-sm btn-primary ml-2" href="registro.php">Registrarte</a>
+            <a class="btn btn-sm btn-primary ml-2" href="registro.php">Registrarte</a><br>
+            <a href="recuperar_pass.php" class="link link-info">¿Olvidaste la contraseña?</a>
             <?=$error;?>
    
             <?php } else { ?>

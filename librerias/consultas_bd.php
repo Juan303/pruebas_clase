@@ -23,7 +23,8 @@ function login($conexion, $email, $pass)
         if ($pass == $row['pass'] && $row['estado'] != 'desactivada') {
             $_SESSION['email'] = $row['email'];
             $_SESSION['usuario'] = $row['usuario'];
-            return true;
+            header("Location: index.php");
+            //return true;
         }
     }
     return false;
@@ -82,7 +83,24 @@ function modificar_usuario($conexion, $array, $email_user)
         }
     }
 } 
-
+function renovar_pass($conexion, $pass, $pass_r, $email){
+    if($pass == $pass_r){
+        $usuario = extraer_usuario($conexion, $email);
+        if($usuario != NULL){
+            $pass = crypt($pass, 'rl');
+            $consulta = mysqli_query($conexion, "UPDATE usuarios SET pass = '$pass' WHERE email = '$email'");
+            if($consulta){
+                return "Contraseña actualizada";
+            }
+            else{
+                return "problemas al renovar la contraseña prueba de nuevo mas tarde";
+            }
+        }
+    }
+    else{
+        return "las contraseñas no coinciden";
+    }
+}
 
 function actualizar_pass($conexion, $pass_antigua, $pass_nueva, $pass_nueva_r, $email){
     if($pass_nueva == $pass_nueva_r){
@@ -106,6 +124,16 @@ function actualizar_pass($conexion, $pass_antigua, $pass_nueva, $pass_nueva_r, $
         return "<div class='alert alert-danger' role='alert'>No se ha podido cambiar la contraseña: las contraseñas no coinciden</div>";
     }
 
+}
+
+function comprobar_codigo_activacion($conexion, $codigo, $mail){
+    $usuario = extraer_usuario($conexion, $mail);
+    if($usuario['codigo_activacion'] == $codigo){
+        return true;
+    }
+    else{
+        return false;
+    }
 }
 
 function is_admin($conexion, $email)
