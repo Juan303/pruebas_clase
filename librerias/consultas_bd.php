@@ -293,12 +293,12 @@ function buscar($conexion, $tabla, $campo, $cadena){
 
 //=============================================================================================================GENERALES
 
-function list_registros($conexion, $tabla, $orden, $tipo, $id_categoria)
+function list_registros($conexion, $tabla, $orden, $tipo, $id_categoria, $lim_inf=0, $lim_sup=10)
 {
     if ($id_categoria != "todos") {
-        $sql = "SELECT * FROM $tabla WHERE id_categoria = '$id_categoria' ORDER BY $orden $tipo";
+        $sql = "SELECT * FROM $tabla WHERE id_categoria = '$id_categoria' ORDER BY $orden $tipo LIMIT $lim_inf, $lim_sup";
     } else {
-        $sql = "SELECT * FROM $tabla ORDER BY $orden $tipo";
+        $sql = "SELECT * FROM $tabla ORDER BY $orden $tipo  LIMIT $lim_inf, $lim_sup";
     }
     $consulta = mysqli_query($conexion, $sql);
     return $consulta;
@@ -317,6 +317,18 @@ function extraer_registro($conexion, $tabla, $id){
     $consulta = mysqli_query($conexion, "SELECT * FROM $tabla WHERE id = '$id'");
     $registro = mysqli_fetch_array($consulta);
     return $registro;
+}
+
+function n_elementos_tabla($conexion, $tabla, $categoria=""){
+    if($categoria != ""){
+        $consulta = mysqli_query($conexion, "SELECT COUNT(*) FROM $tabla WHERE id_categoria = '$categoria'");
+    }
+    else{
+        $consulta = mysqli_query($conexion, "SELECT COUNT(*) FROM $tabla");
+    }
+    echo mysqli_error($conexion);
+    $n_registros = mysqli_fetch_array($consulta);
+    return $n_registros[0];
 }
 //===============================================================================================================ACTIVAR CUENTA
 function activar_cuenta($conexion, $codigo, $email){

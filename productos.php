@@ -2,7 +2,7 @@
 session_start();
 include "database/conexion_bd.php";
 include "librerias/consultas_bd.php";
-
+$n_elementos_pagina = 3;
 $titulo = "Últimos productos añadidos";
 if(isset($_POST['buscar'])){
     $productos = buscar($conexion, 'productos', 'nombre', $_POST['texto']);
@@ -10,19 +10,32 @@ if(isset($_POST['buscar'])){
 }
 else if (isset($_GET['categoria'])) {
     $titulo = nombre_categoria($conexion, $_GET['categoria']);
+    $n_registros = n_elementos_tabla($conexion, 'productos', $_GET['categoria']);
     if(isset($_POST['ordenar'])){
-        $productos = list_registros($conexion, 'productos',$_POST['orden'], $_POST['tipo'], $_GET['categoria']);
+        $productos = list_registros($conexion, 'productos',$_POST['orden'], $_POST['tipo'], $_GET['categoria'], 0, $n_elementos_pagina);
+    }
+    else if(isset($_GET['lim_inf'])){
+        $productos = list_registros($conexion, 'productos', 'fecha', "ASC", $_GET['categoria'], $_GET['lim_inf'], $n_elementos_pagina);
     }
     else{
-        $productos = list_registros($conexion, 'productos','fecha', "ASC",  $_GET['categoria']);
+        $productos = list_registros($conexion, 'productos','fecha', "ASC",  $_GET['categoria'], 0, $n_elementos_pagina);
     }
 }
 else if(isset($_POST['ordenar'])){
-    $productos = list_registros($conexion, 'productos',$_POST['orden'], $_POST['tipo'], "todos"); 
+    $productos = list_registros($conexion, 'productos',$_POST['orden'], $_POST['tipo'], "todos", 0, $n_elementos_pagina);
+    $n_registros = n_elementos_tabla($conexion, 'productos');
 }
 else{
-    $productos = list_registros($conexion, 'productos','fecha', "ASC", "todos");
+    if(isset($_GET['lim_inf'])){
+        $productos = list_registros($conexion, 'productos', 'fecha', "ASC", "todos", $_GET['lim_inf'], $n_elementos_pagina);
+    }
+    else{
+        $productos = list_registros($conexion, 'productos', 'fecha', "ASC", "todos", 0, $n_elementos_pagina);
+    }
+    $n_registros = n_elementos_tabla($conexion,'productos');
 }
+$n_paginas = intdiv($n_registros, $n_elementos_pagina);
+
 ?>
     <!doctype html>
     <html lang="es">
@@ -73,6 +86,23 @@ else{
                     </div>
                 </div>
                 <?php } }?>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <ul>
+                        <?php
+
+                            for ($i=0; $i<=$n_paginas; $i++){ 
+                                $lim_inf = $i*$n_elementos_pagina;
+                                if(isset($_GET['categoria'])){ 
+                            ?>
+                            
+                               <li><a href="?categoria=<?=$_GET['categoria'];?>&lim_inf=<?=$lim_inf;?>"><?=($i+1);?></a></li> 
+                          <?php  } else { ?>
+                                <li><a href="?lim_inf=<?=$lim_inf;?>"><?=($i+1);?></a></li>
+                          <?php }} ?>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="container-fluid">
